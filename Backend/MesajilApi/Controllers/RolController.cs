@@ -1,4 +1,4 @@
-﻿using MesajilApi.Models;
+﻿using MesajilApi.DTOs.Rol;
 using MesajilApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,13 +14,13 @@ namespace MesajilApi.Controllers
             _rolService = rolService;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rol>>> ObtenerTodos()
+        public async Task<ActionResult<IEnumerable<RolResponseDto>>> ObtenerTodos()
         {
             var roles = await _rolService.ObtenerTodosAsync();
             return Ok(roles);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Rol>> ObtenerPorId(int id)
+        public async Task<ActionResult<RolResponseDto>> ObtenerPorId(int id)
         {
             var rol = await _rolService.ObtenerPorIdAsync(id);
             if (rol == null)
@@ -30,7 +30,7 @@ namespace MesajilApi.Controllers
                 return Ok(rol);
         }
         [HttpPost]
-        public async Task<ActionResult<Rol>> Crear(Rol rol)
+        public async Task<ActionResult<RolResponseDto>> Crear(RolCreateDto rol)
         {
             var nuevoRol = await _rolService.CrearAsync(rol);
             return CreatedAtAction(
@@ -40,12 +40,12 @@ namespace MesajilApi.Controllers
                 );
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Actualizar(int id, Rol rol)
+        public async Task<IActionResult> Actualizar(int id, RolUpdateDto dto)
         {
-            if (id != rol.IdRol)
+            if (id != dto.IdRol)
                 return BadRequest();
 
-            await _rolService.ActualizarAsync(rol);
+            await _rolService.ActualizarAsync(dto);
             return NoContent();
         }
         [HttpDelete("{id}")]

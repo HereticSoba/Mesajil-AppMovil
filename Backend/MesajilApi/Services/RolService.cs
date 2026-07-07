@@ -1,4 +1,5 @@
-﻿using MesajilApi.Models;
+﻿using MesajilApi.DTOs.Rol;
+using MesajilApi.Mappings.Rol;
 using MesajilApi.Repositories;
 
 namespace MesajilApi.Services
@@ -10,21 +11,29 @@ namespace MesajilApi.Services
         {
             _rolRepository = rolRepository;
         }
-        public async Task<IEnumerable<Rol>> ObtenerTodosAsync()
+        public async Task<IEnumerable<RolResponseDto>> ObtenerTodosAsync()
         {
-            return await _rolRepository.ObtenerTodosAsync();
+            var roles = await _rolRepository.ObtenerTodosAsync();
+            return RolMapper.ToResponseDtoList(roles);
         }
-        public async Task<Rol?> ObtenerPorIdAsync(int id)
+        public async Task<RolResponseDto?> ObtenerPorIdAsync(int id)
         {
-            return await _rolRepository.ObtenerPorIdAsync(id);
+            var rol = await _rolRepository.ObtenerPorIdAsync(id);
+            if (rol == null)
+                return null;
+
+            return RolMapper.ToResponseDto(rol);
         }
-        public async Task<Rol> CrearAsync(Rol rol)
+        public async Task<RolResponseDto> CrearAsync(RolCreateDto dto)
         {
-            return await _rolRepository.CrearAsync(rol);
+            var entidad = RolMapper.ToEntity(dto);
+            var nuevoRol = await _rolRepository.CrearAsync(entidad);
+            return RolMapper.ToResponseDto(nuevoRol);
         }
-        public async Task ActualizarAsync(Rol rol)
+        public async Task ActualizarAsync(RolUpdateDto dto)
         {
-            await _rolRepository.ActualizarAsync(rol);
+            var entidad = RolMapper.ToEntity(dto);
+            await _rolRepository.ActualizarAsync(entidad);
         }
         public async Task EliminarAsync(int id)
         {
