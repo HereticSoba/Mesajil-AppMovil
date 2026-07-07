@@ -1,0 +1,18 @@
+# MySQL Workbench
+*.bak
+
+# Visual Studio
+.vs/
+bin/
+obj/
+
+# Android Studio
+.idea/
+.gradle/
+build/
+local.properties
+*.apk
+
+# Archivos del sistema
+Thumbs.db
+.DS_Store
