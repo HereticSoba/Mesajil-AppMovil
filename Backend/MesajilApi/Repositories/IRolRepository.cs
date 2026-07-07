@@ -5,7 +5,7 @@ namespace MesajilApi.Repositories
     {
         Task<IEnumerable<Rol>> ObtenerTodosAsync();
         Task<Rol?> ObtenerPorIdAsync(int id);
-        Task<Rol?> CrearAsync(Rol rol);
+        Task<Rol> CrearAsync(Rol rol);
         Task ActualizarAsync(Rol rol);
         Task EliminarAsync(int id);
     }
