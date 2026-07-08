@@ -1,7 +1,7 @@
 ﻿using MesajilApi.DTOs.Rol;
 using RolEntity = MesajilApi.Models.Rol;
 
-namespace MesajilApi.Mappings.Rol
+namespace MesajilApi.Mappings
 {
     public static class RolMapper
     {

@@ -1,5 +1,5 @@
 ﻿using MesajilApi.DTOs.Rol;
-using MesajilApi.Mappings.Rol;
+using MesajilApi.Mappings;
 using MesajilApi.Repositories;
 
 namespace MesajilApi.Services
@@ -21,7 +21,7 @@ namespace MesajilApi.Services
             var rol = await _rolRepository.ObtenerPorIdAsync(id);
             if (rol == null)
                 return null;
-
+            
             return RolMapper.ToResponseDto(rol);
         }
         public async Task<RolResponseDto> CrearAsync(RolCreateDto dto)
