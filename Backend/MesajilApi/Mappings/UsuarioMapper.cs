@@ -14,7 +14,7 @@ namespace MesajilApi.Mappings
                 Nombres = dto.Nombres,
                 Apellidos = dto.Apellidos,
                 Correo = dto.Correo,
-                Contrasena = dto.Contrasena,
+                Contrasena = BCrypt.Net.BCrypt.HashPassword(dto.Contrasena),
                 Telefono = dto.Telefono,
                 Direccion = dto.Direccion,
                 FechaRegistro = DateTime.Now,

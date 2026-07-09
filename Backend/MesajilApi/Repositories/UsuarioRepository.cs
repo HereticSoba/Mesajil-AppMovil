@@ -43,5 +43,11 @@ namespace MesajilApi.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<Usuario?> ObtenerPorCorreoAsync(string correo)
+        {
+            return await _context.Usuarios
+                .Include(u => u.Rol)
+                .FirstOrDefaultAsync(u => u.Correo == correo);
+        }
     }
 }
