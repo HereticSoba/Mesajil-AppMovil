@@ -20,7 +20,7 @@ namespace MesajilApi.DTOs.Usuario
 
         [Required]
         [MinLength(6)]
-        public string Contraseña {  get; set; } = string.Empty;
+        public string Contrasena {  get; set; } = string.Empty;
 
         [StringLength(20)]
         public string? Telefono {  get; set; }

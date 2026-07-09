@@ -26,7 +26,7 @@ namespace MesajilApi.Models
 
         [Required]
         [StringLength(255)]
-        public string Contraseña { get; set; } = string.Empty;
+        public string Contrasena { get; set; } = string.Empty;
 
         [StringLength(20)]
         public string? Telefono {  get; set; }

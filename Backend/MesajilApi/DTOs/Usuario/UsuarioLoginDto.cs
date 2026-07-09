@@ -9,6 +9,6 @@ namespace MesajilApi.DTOs.Usuario
         public string Correo { get; set; } = string.Empty;
 
         [Required]
-        public string Contraseña { get; set; } = string.Empty;
+        public string Contrasena { get; set; } = string.Empty;
     }
 }
