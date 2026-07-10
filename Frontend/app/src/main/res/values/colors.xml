@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mesajil_blue">#092892</color>
+    <color name="mesajil_blue_dark">#012B52</color>
+    <color name="mesajil_blue_light">#42A5F5</color>
+
+    <color name="mesajil_cyan">#29B6F6</color>
+
+    <color name="mesajil_white">#FFFFFF</color>
+    <color name="mesajil_black">#1F1F1F</color>
+
+    <color name="background">#F5F7FA</color>
+    <color name="surface">#FFFFFF</color>
+
+    <color name="text_primary">#1F1F1F</color>
+    <color name="text_secondary">#616161</color>
+
+    <color name="success">#2E7D32</color>
+    <color name="error">#D32F2F</color>
+</resources>
