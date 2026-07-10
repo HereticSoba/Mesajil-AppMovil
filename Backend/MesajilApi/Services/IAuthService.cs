@@ -1,6 +1,10 @@
-﻿namespace MesajilApi.Services
+﻿using MesajilApi.DTOs.Autenticador;
+using MesajilApi.DTOs.Usuario;
+
+namespace MesajilApi.Services
 {
-    public class IAuthService
+    public interface IAuthService
     {
+        Task<LoginResponseDto?> LoginAsync(UsuarioLoginDto dto);
     }
 }
