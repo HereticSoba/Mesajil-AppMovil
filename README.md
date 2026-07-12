@@ -8,6 +8,7 @@ Solución de aplicativo móvil para la gestión de ventas y control de inventari
 - JWT Authentication
 - BCrypt.Net
 - Swagger /OpenAPI
+- Inyección de dependencias
 - Patrón Repository
 
 ### Frontend
@@ -22,10 +23,12 @@ Solución de aplicativo móvil para la gestión de ventas y control de inventari
 - SharedPreferences (SessionManager)
 
 ### Base de datos
-- MySQL Workbench
+- MySQL
 
 ### Herramientas
 - Visual Studio 2022
 - Android Studio
+- MySQL Workbench
+- Git
 - Github
 - Swagger UI
