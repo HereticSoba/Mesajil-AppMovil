@@ -3,6 +3,31 @@ Solución de aplicativo móvil para la gestión de ventas y control de inventari
 
 ## Tecnologías utilizadas:
 ### Backend
-- ASP.NET Core Web API
+- ASP.NET Core Web API (.NET 8)
 - Entity Framework Core
-- MYSQL
+- JWT Authentication
+- BCrypt.Net
+- Swagger /OpenAPI
+- Inyección de dependencias
+- Patrón Repository
+
+### Frontend
+- Kotlin
+- Android SDK
+- Material Design 3
+- ViewBinding
+- MVVM (Modelo - Vista - VistaModelo)
+- LiveData
+- Retrofit
+- Gson Converter
+- SharedPreferences (SessionManager)
+
+### Base de datos
+- MySQL Workbench
+
+### Herramientas
+- Visual Studio 2022
+- Android Studio
+- Github
+- Swagger UI
+- Postman
