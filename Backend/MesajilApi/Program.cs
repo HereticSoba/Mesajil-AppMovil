@@ -51,7 +51,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//Deshabilitado porque me arroja error ya que el programa quiere el certificado HTTPS (por ahora no hay)
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 

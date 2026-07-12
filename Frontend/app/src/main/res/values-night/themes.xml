@@ -1,7 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MesajilAppMovil" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
-    </style>
+        <item name="colorPrimary">@color/mesajil_blue</item>
+        <item name="colorOnPrimary">@color/mesajil_white</item>
+
+        <item name="colorSecondary">@color/mesajil_blue</item>
+        <item name="colorOnSecondary">@color/mesajil_white</item>
+
+        <item name="android:windowBackground">@color/background</item>
+        </style>
 </resources>
