@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/CardRounded"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/spacing_small">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_medium">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgProducto"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/product_image_height"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logomesajil"
+            app:shapeAppearanceOverlay="@style/RoundedImage"/>
+
+        <TextView
+            android:id="@+id/txtNombreProducto"
+            style="@style/ProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:text="Laptop Lenovo ThinkPad"/>
+
+        <TextView
+            android:id="@+id/txtPrecio"
+            style="@style/ProductPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:text="S/. 2,999.00"/>
+
+        <TextView
+            android:id="@+id/txtStock"
+            style="@style/ProductStock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xsmall"
+            android:text="Stock: 20"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAgregar"
+            style="@style/PrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:text="Agregar al carrito"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
