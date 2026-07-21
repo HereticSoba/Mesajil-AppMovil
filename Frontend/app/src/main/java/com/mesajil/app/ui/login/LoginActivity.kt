@@ -7,6 +7,8 @@ import com.mesajil.app.preferences.SessionManager
 import com.mesajil.app.viewmodel.auth.LoginViewModel
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import com.mesajil.app.MainActivity
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -20,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         sessionManager = SessionManager(this)
-
+        binding.edtCorreo.setText(sessionManager.obtenerUltimoCorreo())
         binding.btnLogin.setOnClickListener {
             val correo = binding.edtCorreo.text.toString().trim()
             val contrasena = binding.edtPassword.text.toString().trim()
@@ -45,7 +47,11 @@ class LoginActivity : AppCompatActivity() {
                     response.correo,
                     response.idRol
                 )
+                sessionManager.guardarUltimoCorreo(response.correo)
                 Toast.makeText(this, "Bienvenido ${response.nombres}", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
             }
             result.onFailure {
                 Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()

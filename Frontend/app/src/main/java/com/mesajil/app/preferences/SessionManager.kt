@@ -10,6 +10,7 @@ class SessionManager(context: Context) {
         private const val KEY_NOMBRES = "nombres"
         private const val KEY_CORREO = "correo"
         private const val KEY_ID_ROL = "idRol"
+        private const val KEY_ULTIMO_CORREO = "ultimoCorreo"
     }
 
     private val preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -25,6 +26,7 @@ class SessionManager(context: Context) {
             apply()
         }
     }
+
     fun obtenerToken(): String? =
         preferences.getString(KEY_TOKEN, null)
 
@@ -41,10 +43,25 @@ class SessionManager(context: Context) {
         preferences.getInt(KEY_ID_ROL, 0)
 
     fun cerrarSesion() {
-        preferences.edit().clear().apply()
+        preferences.edit().apply{
+            remove(KEY_TOKEN)
+            remove(KEY_ID_USUARIO)
+            remove(KEY_NOMBRES)
+            remove(KEY_CORREO)
+            remove(KEY_ID_ROL)
+            apply()
+        }
     }
 
-    fun haySesion(): Boolean{
+    fun haySesion(): Boolean {
         return !obtenerToken().isNullOrEmpty()
+    }
+
+    fun guardarUltimoCorreo(correo: String) {
+        preferences.edit().putString(KEY_ULTIMO_CORREO, correo).apply()
+    }
+
+    fun obtenerUltimoCorreo(): String {
+        return preferences.getString(KEY_ULTIMO_CORREO, "") ?: ""
     }
 }
