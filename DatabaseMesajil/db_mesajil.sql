@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `db_mesajil`.`ImagenesProducto` (
   `urlImagen` VARCHAR(255) NOT NULL,
   `principal` TINYINT NOT NULL DEFAULT 0,
   PRIMARY KEY (`idImagen`),
-  INDEX `fk_producto_rol_idx` (`idProducto` ASC) VISIBLE,
+  INDEX `fk_imagen_producto_idx` (`idProducto` ASC) VISIBLE,
   CONSTRAINT `fk_imagen_producto`
     FOREIGN KEY (`idProducto`)
     REFERENCES `db_mesajil`.`Producto` (`idProducto`)

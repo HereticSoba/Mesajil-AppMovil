@@ -45,6 +45,8 @@ builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IProductoService, ProductoService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IImagenProductoRepository, ImagenProductoRepository>();
+builder.Services.AddScoped<IImagenProductoService, ImagenProductoService>();
 
 var app = builder.Build();
 
@@ -57,6 +59,8 @@ if (app.Environment.IsDevelopment())
 
 //Deshabilitado porque me arroja error ya que el programa quiere el certificado HTTPS (por ahora no hay)
 //app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 

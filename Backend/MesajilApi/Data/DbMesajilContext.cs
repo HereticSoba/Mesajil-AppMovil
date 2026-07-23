@@ -10,5 +10,6 @@ namespace MesajilApi.Data
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Producto> Productos { get; set; }
+        public DbSet<ImagenProducto> ImagenesProductos { get; set; }
     }
 }
