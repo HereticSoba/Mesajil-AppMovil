@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MesajilApi.Models
+namespace MesajilApi.DTOs.Producto
 {
-    [Table("Producto")]
-    public class Producto
+    public class ProductoUpdateDto
     {
-        [Key]
+        [Required]
         public int IdProducto { get; set; }
         [Required]
         public int IdCategoria { get; set; }
@@ -16,18 +14,11 @@ namespace MesajilApi.Models
         public string? Descripcion { get; set; }
         [Required]
         [StringLength(80)]
-        public string Marca { get; set; } = string.Empty;
+        public string Marca {  get; set; } = string.Empty;
         [Required]
         [StringLength(80)]
         public string Modelo {  get; set; } = string.Empty;
         [Required]
-        [Column(TypeName = "decimal(10,2)")]
         public decimal Precio { get; set; }
-        [Required]
-        public bool Estado { get; set; }
-        [Required]
-        public DateTime FechaRegistro { get; set; }
-        [ForeignKey(nameof(IdCategoria))]
-        public Categoria? Categoria { get; set; }
     }
 }

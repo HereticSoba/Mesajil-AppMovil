@@ -33,7 +33,7 @@ namespace MesajilApi.Repositories
         public async Task EliminarAsync(int id)
         {
             var categoria = await _context.Categorias.FindAsync(id);
-            if (categoria == null)
+            if (categoria != null)
             {
                 _context.Categorias.Remove(categoria);
                 await _context.SaveChangesAsync();
