@@ -1,5 +1,6 @@
 ## Aplicación móvil E-Commerce
-Solución de aplicativo móvil para la gestión de ventas y control de inventario de productos tecnologícos para la empresa Mesajil Hnos.
+Solución de aplicativo móvil para la empresa Mesajil Hnos., teniendo como objetivos la gestión de ventas, catálogo de productos y control de inventario mediante una arquitectura cliente-servidor.
+La solución está compuesta por una API REST desarrollada en ASP.NET Core y una app móvil Android en Kotlin, incluye autenticación de usuarios, administración de productos, gestión de compras y control de inventario.
 
 ## Tecnologías utilizadas:
 ### Backend
@@ -7,9 +8,10 @@ Solución de aplicativo móvil para la gestión de ventas y control de inventari
 - Entity Framework Core
 - JWT Authentication
 - BCrypt.Net
-- Swagger /OpenAPI
-- Inyección de dependencias
+- Swagger / OpenAPI
+- Inyección de Dependencias
 - Patrón Repository
+- Arquitectura por capas (Controller - Service - Repository - DTO - Mapper)
 
 ### Frontend
 - Kotlin
@@ -21,6 +23,7 @@ Solución de aplicativo móvil para la gestión de ventas y control de inventari
 - Retrofit
 - Gson Converter
 - SharedPreferences (SessionManager)
+- Fragments + Bottom Navigation
 
 ### Base de datos
 - MySQL
