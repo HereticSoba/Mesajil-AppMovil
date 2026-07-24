@@ -85,6 +85,8 @@ builder.Services.AddScoped<IDetalleCarritoRepository, DetalleCarritoRepository>(
 builder.Services.AddScoped<IDetalleCarritoService, DetalleCarritoService>();
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IPedidoService, PedidoService>();
+builder.Services.AddScoped<IDetallePedidoRepository, DetallePedidoRepository>();
+builder.Services.AddScoped<IDetallePedidoService, DetallePedidoService>();
 
 var app = builder.Build();
 
