@@ -79,6 +79,8 @@ builder.Services.AddScoped<IImagenProductoRepository, ImagenProductoRepository>(
 builder.Services.AddScoped<IImagenProductoService, ImagenProductoService>();
 builder.Services.AddScoped<IInventarioRepository, InventarioRepository>();
 builder.Services.AddScoped<IInventarioService, InventarioService>();
+builder.Services.AddScoped<ICarritoRepository, CarritoRepository>();
+builder.Services.AddScoped<IcarritoService, CarritoService>();
 
 var app = builder.Build();
 
