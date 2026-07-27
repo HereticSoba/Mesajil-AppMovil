@@ -23,7 +23,7 @@
             android:name=".ui.categoria.CategoriasFragment"
             android:exported="false" />
         <activity
-            android:name=".ui.carrito.HomeFragment"
+            android:name=".ui.home.HomeFragment"
             android:exported="false" />
         <activity
             android:name=".ui.login.LoginActivity"

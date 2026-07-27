@@ -51,13 +51,11 @@
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:layout_marginTop="@dimen/spacing_medium"
-                android:text="Comprar ahora"
+                android:text="Conocer más"
                 android:textAllCaps="false"
                 android:textColor="@color/mesajil_blue"
                 app:backgroundTint="@android:color/white"/>
-
         </LinearLayout>
-
         <!-- Imagen -->
         <ImageView
             android:id="@+id/imgBanner"
@@ -68,7 +66,5 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:src="@drawable/logomesajil"/>
-
     </LinearLayout>
-
 </com.google.android.material.card.MaterialCardView>

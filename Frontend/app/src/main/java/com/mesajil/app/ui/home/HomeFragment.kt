@@ -6,12 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.mesajil.app.adapters.ProductoAdapter
 import com.mesajil.app.databinding.FragmentHomeBinding
 import com.mesajil.app.models.Producto
 import com.mesajil.app.preferences.SessionManager
 import androidx.recyclerview.widget.GridLayoutManager
+import android.content.Intent
+import com.mesajil.app.ui.producto.DetalleProductoActivity
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -58,11 +59,12 @@ class HomeFragment : Fragment() {
         val adapter = ProductoAdapter(
             listaProductos = productos,
             onProductoClick = { producto ->
-                Toast.makeText(
-                    requireContext(),
-                    producto.nombre,
-                    Toast.LENGTH_SHORT
-                ).show()
+                val intent = Intent(requireContext(), DetalleProductoActivity::class.java)
+                intent.putExtra(DetalleProductoActivity.EXTRA_NOMBRE, producto.nombre)
+                intent.putExtra(DetalleProductoActivity.EXTRA_DESCRIPCION, producto.descripcion)
+                intent.putExtra(DetalleProductoActivity.EXTRA_PRECIO, producto.precio)
+                intent.putExtra(DetalleProductoActivity.EXTRA_STOCK, producto.stock)
+                startActivity(intent)
             },
             onAgregarClick = { producto ->
                 Toast.makeText(
