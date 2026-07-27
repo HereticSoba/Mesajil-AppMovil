@@ -6,9 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.mesajil.app.databinding.ActivityDetalleProductoBinding
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.mesajil.app.ui.carrito.CarritoItem
+import com.mesajil.app.ui.carrito.CarritoManager
 
 class DetalleProductoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetalleProductoBinding
+    private var idProducto = 0
     private var nombre = ""
     private var descripcion = ""
     private var precio = 0.0
@@ -29,6 +32,7 @@ class DetalleProductoActivity : AppCompatActivity() {
     }
 
     private fun obtenerDatosIntent() {
+        idProducto = intent.getIntExtra(EXTRA_ID, 0)
         nombre = intent.getStringExtra(EXTRA_NOMBRE) ?: ""
         descripcion = intent.getStringExtra(EXTRA_DESCRIPCION) ?: ""
         precio = intent.getDoubleExtra(EXTRA_PRECIO, 0.0)
@@ -81,6 +85,13 @@ class DetalleProductoActivity : AppCompatActivity() {
             }
         }
         binding.btnAgregarCarrito.setOnClickListener {
+            val item = CarritoItem(
+                idProducto = idProducto,
+                nombre = nombre,
+                precio = precio,
+                cantidad = cantidad
+            )
+            CarritoManager.agregarProducto(item)
             Toast.makeText(
                 this,
                 "$cantidad unidad(es) agregadas al carrito.",
@@ -101,6 +112,7 @@ class DetalleProductoActivity : AppCompatActivity() {
     }
 
     companion object {
+        const val EXTRA_ID = "extra_id"
         const val EXTRA_NOMBRE = "extra_nombre"
         const val EXTRA_DESCRIPCION = "extra_descripcion"
         const val EXTRA_PRECIO = "extra_precio"

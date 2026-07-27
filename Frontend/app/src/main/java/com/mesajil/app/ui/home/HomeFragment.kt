@@ -60,6 +60,7 @@ class HomeFragment : Fragment() {
             listaProductos = productos,
             onProductoClick = { producto ->
                 val intent = Intent(requireContext(), DetalleProductoActivity::class.java)
+                intent.putExtra(DetalleProductoActivity.EXTRA_ID, producto.idProducto)
                 intent.putExtra(DetalleProductoActivity.EXTRA_NOMBRE, producto.nombre)
                 intent.putExtra(DetalleProductoActivity.EXTRA_DESCRIPCION, producto.descripcion)
                 intent.putExtra(DetalleProductoActivity.EXTRA_PRECIO, producto.precio)
