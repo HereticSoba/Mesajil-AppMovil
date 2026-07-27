@@ -11,6 +11,7 @@ import com.mesajil.app.adapters.ProductoAdapter
 import com.mesajil.app.databinding.FragmentHomeBinding
 import com.mesajil.app.models.Producto
 import com.mesajil.app.preferences.SessionManager
+import androidx.recyclerview.widget.GridLayoutManager
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -71,7 +72,7 @@ class HomeFragment : Fragment() {
                 ).show()
             }
         )
-        binding.rvProductos.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvProductos.layoutManager = GridLayoutManager(requireContext(),2)
         binding.rvProductos.adapter = adapter
     }
     override fun onDestroyView() {

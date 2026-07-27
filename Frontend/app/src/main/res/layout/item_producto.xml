@@ -1,60 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/CardRounded"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/spacing_small">
+    android:layout_margin="@dimen/spacing_small"
+    app:cardCornerRadius="@dimen/corner_radius_large"
+    app:cardElevation="@dimen/card_elevation"
+    app:cardBackgroundColor="@color/surface">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_medium">
+        android:orientation="vertical">
+
+        <!-- Imagen -->
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgProducto"
             android:layout_width="match_parent"
             android:layout_height="@dimen/product_image_height"
-            android:background="#EEEEEE"
             android:scaleType="centerCrop"
             android:src="@drawable/logomesajil"
             app:shapeAppearanceOverlay="@style/RoundedImage"/>
 
-        <TextView
-            android:id="@+id/txtNombreProducto"
-            style="@style/ProductName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_medium"
-            android:text="Laptop Lenovo ThinkPad"/>
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_medium">
 
-        <TextView
-            android:id="@+id/txtPrecio"
-            style="@style/ProductPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_small"
-            android:text="S/. 2,999.00"/>
+            <!-- Nombre -->
 
-        <TextView
-            android:id="@+id/txtStock"
-            style="@style/ProductStock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_xsmall"
-            android:text="Stock: 20"/>
+            <TextView
+                android:id="@+id/txtNombre"
+                style="@style/ProductName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="Laptop Lenovo ThinkPad"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAgregar"
-            style="@style/PrimaryButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_medium"
-            android:text="Agregar al carrito"/>
+            <!-- Rating -->
 
+            <RatingBar
+                android:id="@+id/ratingProducto"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:rating="4.5"
+                android:stepSize="0.5"/>
+
+            <!-- Precio -->
+
+            <TextView
+                android:id="@+id/txtPrecio"
+                style="@style/ProductPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:text="S/. 2,999.90"/>
+
+            <!-- Stock -->
+
+            <TextView
+                android:id="@+id/txtStock"
+                style="@style/ProductStock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stock disponible: 10"/>
+
+            <!-- Botón -->
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAgregar"
+                style="@style/PrimaryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:text="Agregar"
+                android:textAllCaps="false"
+                app:icon="@android:drawable/ic_input_add"
+                app:iconGravity="textStart"/>
+        </LinearLayout>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

@@ -15,7 +15,7 @@ class ProductoAdapter(
         private val binding: ItemProductoBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(producto: Producto) {
-            binding.txtNombreProducto.text = producto.nombre
+            binding.txtNombre.text = producto.nombre
             binding.txtPrecio.text = "S/. %.2f".format(producto.precio)
             binding.txtStock.text = "Stock: ${producto.stock}"
             binding.root.setOnClickListener {

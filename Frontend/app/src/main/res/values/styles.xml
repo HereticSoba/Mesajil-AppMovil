@@ -12,7 +12,9 @@
     </style>
 
     <style name="PrimaryButton" parent="Widget.Material3.Button">
-        <item name="cornerRadius">@dimen/corner_radius_small</item>
+        <item name="cornerRadius">@dimen/corner_radius_medium</item>
+        <item name="backgroundTint">@color/mesajil_blue</item>
+        <item name="android:textColor">@color/mesajil_white</item>
     </style>
 
     <style name="SectionTitle">
@@ -29,13 +31,13 @@
 
     <style name="ProductPrice">
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/text_large</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/mesajil_blue</item>
     </style>
 
     <style name="ProductStock">
         <item name="android:textSize">@dimen/text_small</item>
-        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textColor">@color/text_secondary</item>
     </style>
 
 </resources>
