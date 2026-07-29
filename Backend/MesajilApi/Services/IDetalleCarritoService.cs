@@ -6,6 +6,7 @@ namespace MesajilApi.Services
     {
         Task<List<DetalleCarritoResponseDto>> ObtenerTodosAsync();
         Task<DetalleCarritoResponseDto?> ObtenerPorIdAsync(int id);
+        Task<List<DetalleCarritoResponseDto>> ObtenerPorCarritoAsync(int idCarrito);
         Task<DetalleCarritoResponseDto> CrearAsync(DetalleCarritoCreateDto dto);
         Task<DetalleCarritoResponseDto?> ActualizarAsync(int id, DetalleCarritoUpdateDto dto);
         Task<bool> EliminarAsync(int id);

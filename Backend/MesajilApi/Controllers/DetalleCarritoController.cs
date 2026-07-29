@@ -55,5 +55,11 @@ namespace MesajilApi.Controllers
                 return NotFound();
             return NoContent();
         }
+        [HttpGet("carrito/{idCarrito}")]
+        public async Task<ActionResult<List<DetalleCarritoResponseDto>>> ObtenerPorCarrito(int idCarrito)
+        {
+            var detalles = await _service.ObtenerPorCarritoAsync(idCarrito);
+            return Ok(detalles);
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace MesajilApi.Mappings
                 IdDetalleCarrito = detalle.IdDetalleCarrito,
                 IdCarrito = detalle.IdCarrito,
                 IdProducto = detalle.IdProducto,
-                NombreProducto = detalle.Producto.Nombre,
+                NombreProducto = detalle.Producto!.Nombre,
                 Marca = detalle.Producto.Marca,
                 Modelo = detalle.Producto.Modelo,
                 Cantidad = detalle.Cantidad,

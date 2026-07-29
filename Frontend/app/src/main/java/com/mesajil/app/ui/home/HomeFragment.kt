@@ -8,20 +8,22 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.mesajil.app.adapters.ProductoAdapter
 import com.mesajil.app.databinding.FragmentHomeBinding
-import com.mesajil.app.models.Producto
 import com.mesajil.app.preferences.SessionManager
 import androidx.recyclerview.widget.GridLayoutManager
 import android.content.Intent
 import com.mesajil.app.ui.producto.DetalleProductoActivity
 import androidx.lifecycle.lifecycleScope
+import com.mesajil.app.models.request.DetalleCarritoRequest
 import com.mesajil.app.repository.ProductoRepository
 import kotlinx.coroutines.launch
+import com.mesajil.app.repository.DetalleCarritoRepository
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var sessionManager: SessionManager
     private val productoRepository = ProductoRepository()
+    private val detalleCarritoRepository = DetalleCarritoRepository()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,19 +51,43 @@ class HomeFragment : Fragment() {
                     startActivity(intent)
                 },
                 onAgregarClick = { producto ->
-                    Toast.makeText(
-                        requireContext(),
-                        "${producto.nombre} agregado al carrito",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        val idCarrito = sessionManager.obtenerIdCarrito()
+                        if (idCarrito == 0) {
+                            Toast.makeText(
+                                requireContext(),
+                                "No se encontró el carrito.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@launch
+                        }
+                        val request = DetalleCarritoRequest(
+                            idCarrito = idCarrito,
+                            idProducto = producto.idProducto,
+                            cantidad = 1,
+                            precioUnitario = producto.precio
+                        )
+                        val resultado = detalleCarritoRepository.crear(request)
+                        if (resultado != null) {
+                            Toast.makeText(
+                                requireContext(),
+                                "${producto.nombre} agregado al carrito.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Error al agregar el producto.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                    }
                 }
             )
             binding.rvProductos.layoutManager = GridLayoutManager(requireContext(), 2)
             binding.rvProductos.adapter = adapter
         }
-//        override fun onDestroyView() {
-//            super.onDestroyView()
-//            _binding = null
-//        }
+
     }
 }

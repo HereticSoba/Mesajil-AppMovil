@@ -31,7 +31,8 @@ namespace MesajilApi.Services
             }
             var detalle = DetalleCarritoMapper.ToEntity(dto);
             var creado = await _repository.CrearAsync(detalle);
-            return DetalleCarritoMapper.ToResponseDto(creado);
+            var detalleCompleto = await _repository.ObtenerPorIdAsync(creado.IdDetalleCarrito);
+            return DetalleCarritoMapper.ToResponseDto(detalleCompleto!);
         }
         public async Task<DetalleCarritoResponseDto?> ActualizarAsync(int id, DetalleCarritoUpdateDto dto)
         {
@@ -49,7 +50,13 @@ namespace MesajilApi.Services
 
             detalleExistente.Subtotal = dto.Cantidad * dto.PrecioUnitario;
             var actualizado = await _repository.ActualizarAsync(detalleExistente);
-            return DetalleCarritoMapper.ToResponseDto(actualizado);
+            var detalleCompleto = await _repository.ObtenerPorIdAsync(actualizado.IdDetalleCarrito);
+            return DetalleCarritoMapper.ToResponseDto(detalleCompleto!);
+        }
+        public async Task<List<DetalleCarritoResponseDto>> ObtenerPorCarritoAsync(int idCarrito)
+        {
+            var detalles = await _repository.ObtenerPorCarritoAsync(idCarrito);
+            return DetalleCarritoMapper.ToResponseDtoList(detalles);
         }
         public async Task<bool> EliminarAsync(int id)
         {

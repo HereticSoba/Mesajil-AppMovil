@@ -4,9 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mesajil.app.databinding.ItemCarritoBinding
+import com.mesajil.app.models.response.DetalleCarritoResponse
 
 class CarritoAdapter(
-    private val productos: MutableList<CarritoItem>,
+    private val productos: MutableList<DetalleCarritoResponse>,
     private val onCarritoActualizado: () -> Unit
 ) : RecyclerView.Adapter<CarritoAdapter.CarritoViewHolder>() {
 
@@ -23,48 +24,48 @@ class CarritoAdapter(
         return productos.size
     }
 
-    private fun mostrarProducto(holder: CarritoViewHolder, producto: CarritoItem) {
+    private fun mostrarProducto(holder: CarritoViewHolder, producto: DetalleCarritoResponse) {
         with(holder.binding) {
-            txtNombre.text = producto.nombre
-            txtPrecio.text = "S/. %.2f".format(producto.precio)
+            txtNombre.text = producto.nombreProducto
+            txtPrecio.text = "S/. %.2f".format(producto.precioUnitario)
             txtCantidad.text = producto.cantidad.toString()
             txtSubtotal.text = "Subtotal: S/. %.2f".format(producto.subtotal)
         }
     }
 
-    private fun configurarEventos(holder: CarritoViewHolder, producto: CarritoItem) {
-        with(holder.binding) {
-            btnMas.setOnClickListener {
-                aumentarCantidad(producto)
-            }
-            btnMenos.setOnClickListener {
-                disminuirCantidad(producto)
-            }
-            btnEliminar.setOnClickListener {
-                eliminarProducto(producto)
-            }
-        }
+    private fun configurarEventos(holder: CarritoViewHolder, producto: DetalleCarritoResponse) {
+//        with(holder.binding) {
+//            btnMas.setOnClickListener {
+//                aumentarCantidad(producto)
+//            }
+//            btnMenos.setOnClickListener {
+//                disminuirCantidad(producto)
+//            }
+//            btnEliminar.setOnClickListener {
+//                eliminarProducto(producto)
+//            }
+//        }
     }
 
-    private fun aumentarCantidad(producto: CarritoItem) {
-        producto.cantidad++
-        notifyDataSetChanged()
-        onCarritoActualizado()
-    }
-
-    private fun disminuirCantidad(producto: CarritoItem) {
-        if (producto.cantidad > 1) {
-            producto.cantidad--
-            notifyDataSetChanged()
-            onCarritoActualizado()
-        }
-    }
-
-    private fun eliminarProducto(producto: CarritoItem) {
-        productos.remove(producto)
-        notifyDataSetChanged()
-        onCarritoActualizado()
-    }
+//    private fun aumentarCantidad(producto: DetalleCarritoResponse) {
+//        producto.cantidad++
+//        notifyDataSetChanged()
+//        onCarritoActualizado()
+//    }
+//
+//    private fun disminuirCantidad(producto: DetalleCarritoResponse) {
+//        if (producto.cantidad > 1) {
+//            producto.cantidad--
+//            notifyDataSetChanged()
+//            onCarritoActualizado()
+//        }
+//    }
+//
+//    private fun eliminarProducto(producto: DetalleCarritoResponse) {
+//        productos.remove(producto)
+//        notifyDataSetChanged()
+//        onCarritoActualizado()
+//    }
 
     override fun onBindViewHolder(holder: CarritoViewHolder, position: Int) {
         val producto = productos[position]

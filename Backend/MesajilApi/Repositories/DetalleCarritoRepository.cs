@@ -46,5 +46,13 @@ namespace MesajilApi.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<List<DetalleCarrito>> ObtenerPorCarritoAsync(int idCarrito)
+        {
+            return await _context.DetalleCarritos
+                .Include(d => d.Carrito)
+                .Include(d => d.Producto)
+                .Where(d => d.IdCarrito == idCarrito)
+                .ToListAsync();
+        }
     }
 }
