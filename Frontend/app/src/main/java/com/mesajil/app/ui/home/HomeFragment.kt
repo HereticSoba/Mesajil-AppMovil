@@ -61,33 +61,60 @@ class HomeFragment : Fragment() {
                             ).show()
                             return@launch
                         }
-                        val request = DetalleCarritoRequest(
-                            idCarrito = idCarrito,
-                            idProducto = producto.idProducto,
-                            cantidad = 1,
-                            precioUnitario = producto.precio
+                        val existente = detalleCarritoRepository.obtenerPorCarritoYProducto(
+                            idCarrito,
+                            producto.idProducto
                         )
-                        val resultado = detalleCarritoRepository.crear(request)
-                        if (resultado != null) {
-                            Toast.makeText(
-                                requireContext(),
-                                "${producto.nombre} agregado al carrito.",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        if (existente == null) {
+                            val request = DetalleCarritoRequest(
+                                idCarrito = idCarrito,
+                                idProducto = producto.idProducto,
+                                cantidad = 1,
+                                precioUnitario = producto.precio
+                            )
+                            val resultado = detalleCarritoRepository.crear(request)
+                            if (resultado != null) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "${producto.nombre} agregado al carrito.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Error al agregar el producto.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "Error al agregar el producto.",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            val request = DetalleCarritoRequest(
+                                idCarrito = existente.idCarrito,
+                                idProducto = existente.idProducto,
+                                cantidad = existente.cantidad + 1,
+                                precioUnitario = existente.precioUnitario
+                            )
+                            val actualizado = detalleCarritoRepository.actualizar(
+                                existente.idDetalleCarrito,
+                                request
+                            )
+                            if (actualizado) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Cantidad actualizada.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(), "Error al actualizar el carrito.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
-
                     }
                 }
             )
             binding.rvProductos.layoutManager = GridLayoutManager(requireContext(), 2)
             binding.rvProductos.adapter = adapter
         }
-
     }
 }

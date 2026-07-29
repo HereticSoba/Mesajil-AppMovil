@@ -61,5 +61,13 @@ namespace MesajilApi.Controllers
             var detalles = await _service.ObtenerPorCarritoAsync(idCarrito);
             return Ok(detalles);
         }
+        [HttpGet("carrito/{idCarrito}/producto/{idProducto}")]
+        public async Task<ActionResult<DetalleCarritoResponseDto>> ObtenerPorCarritoYProducto(int idCarrito, int idProducto)
+        {
+            var detalle = await _service.ObtenerPorCarritoYProductoAsync(idCarrito, idProducto);
+            if (detalle == null)
+                return NotFound();
+            return Ok(detalle);
+        }
     }
 }

@@ -52,6 +52,21 @@ class DetalleCarritoRepository {
         return null
     }
 
+    suspend fun obtenerPorCarritoYProducto(
+        idCarrito: Int,
+        idProducto: Int
+    ): DetalleCarritoResponse? {
+        val response =
+            ApiClient.detalleCarritoService.obtenerPorCarritoYProducto(idCarrito, idProducto)
+        Log.d("DetalleCarritoRepository", "Buscar Producto HTTP: ${response.code()}")
+        return if (response.isSuccessful) {
+            response.body()
+        } else {
+            null
+        }
+    }
+
+
     suspend fun eliminar(id: Int): Boolean {
         val response = ApiClient.detalleCarritoService.eliminar(id)
         return response.isSuccessful

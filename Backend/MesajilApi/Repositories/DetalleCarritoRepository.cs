@@ -54,5 +54,11 @@ namespace MesajilApi.Repositories
                 .Where(d => d.IdCarrito == idCarrito)
                 .ToListAsync();
         }
+        public async Task<DetalleCarrito?> ObtenerPorCarritoYProductoAsync(int idCarrito, int idProducto)
+        {
+            return await _context.DetalleCarritos
+                .Include(d => d.Producto)
+                .FirstOrDefaultAsync(d => d.IdCarrito == idCarrito && d.IdProducto == idProducto);
+        }
     }
 }

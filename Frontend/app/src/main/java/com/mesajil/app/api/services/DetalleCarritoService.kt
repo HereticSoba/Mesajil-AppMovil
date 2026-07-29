@@ -30,6 +30,12 @@ interface DetalleCarritoService {
         @Path("idCarrito") idCarrito: Int
     ): Response<List<DetalleCarritoResponse>>
 
+    @GET("api/DetalleCarrito/carrito/{idCarrito}/producto/{idProducto}")
+    suspend fun obtenerPorCarritoYProducto(
+        @Path("idCarrito") idCarrito: Int,
+        @Path("idProducto") idProducto: Int
+    ): Response<DetalleCarritoResponse>
+
     @DELETE("api/DetalleCarrito/{id}")
     suspend fun eliminar(
         @Path("id") id: Int

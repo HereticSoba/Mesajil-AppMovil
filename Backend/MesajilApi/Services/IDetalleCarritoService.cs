@@ -10,5 +10,6 @@ namespace MesajilApi.Services
         Task<DetalleCarritoResponseDto> CrearAsync(DetalleCarritoCreateDto dto);
         Task<DetalleCarritoResponseDto?> ActualizarAsync(int id, DetalleCarritoUpdateDto dto);
         Task<bool> EliminarAsync(int id);
+        Task<DetalleCarritoResponseDto?> ObtenerPorCarritoYProductoAsync(int idCarrito, int idProducto);
     }
 }

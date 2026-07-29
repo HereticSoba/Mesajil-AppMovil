@@ -62,5 +62,12 @@ namespace MesajilApi.Services
         {
             return await _repository.EliminarAsync(id);
         }
+        public async Task<DetalleCarritoResponseDto?> ObtenerPorCarritoYProductoAsync(int idCarrito, int idProducto)
+        {
+            var detalle = await _repository.ObtenerPorCarritoYProductoAsync(idCarrito, idProducto);
+            if(detalle == null)
+                return null;
+            return DetalleCarritoMapper.ToResponseDto(detalle);
+        }
     }
 }
