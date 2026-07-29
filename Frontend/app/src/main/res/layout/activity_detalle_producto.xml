@@ -125,11 +125,16 @@
                         android:orientation="horizontal">
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnMenos"
-                            android:layout_width="60dp"
+                            android:layout_width="50dp"
                             android:layout_height="48dp"
                             app:icon="@drawable/ic_remove"
                             app:iconTint="@android:color/white"
                             android:text=""
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            android:insetRight="0dp"
+                            android:insetLeft="0dp"
+                            android:minWidth="48dp"
                             android:textSize="22sp"/>
                         <TextView
                             android:id="@+id/txtCantidad"
@@ -141,11 +146,16 @@
                             android:textSize="20sp"/>
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnMas"
-                            android:layout_width="60dp"
+                            android:layout_width="50dp"
                             android:layout_height="48dp"
                             app:icon="@drawable/ic_add"
                             app:iconTint="@android:color/white"
                             android:text=""
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            android:insetRight="0dp"
+                            android:insetLeft="0dp"
+                            android:minWidth="48dp"
                             android:textSize="22sp"/>
                     </LinearLayout>
                         <com.google.android.material.button.MaterialButton

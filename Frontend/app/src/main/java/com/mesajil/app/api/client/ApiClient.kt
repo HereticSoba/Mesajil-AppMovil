@@ -1,6 +1,7 @@
 package com.mesajil.app.api.client
 
 import com.mesajil.app.api.services.AuthService
+import com.mesajil.app.api.services.ProductoService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -15,5 +16,8 @@ object ApiClient {
     }
     val authService: AuthService by lazy {
         retrofit.create(AuthService::class.java)
+    }
+    val  productoService: ProductoService by lazy {
+        retrofit.create(ProductoService::class.java)
     }
 }

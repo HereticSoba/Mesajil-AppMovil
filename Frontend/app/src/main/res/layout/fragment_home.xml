@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,16 +28,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Hola Diego"
+                    android:textColor="@color/text_primary"
                     android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"/>
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Encuentra la mejor tecnología"
                     android:textColor="@color/text_secondary"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
             </LinearLayout>
+
             <ImageButton
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -45,39 +47,42 @@
                 android:src="@android:drawable/ic_dialog_info"
                 app:tint="@color/mesajil_blue" />
         </LinearLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/spacing_large"
-        android:hint="Buscar productos"
-        app:startIconDrawable="@android:drawable/ic_menu_search">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtBuscar"
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_large"
+            android:hint="Buscar productos"
+            app:startIconDrawable="@android:drawable/ic_menu_search">
 
-    <include layout="@layout/component_banner"/>
-    <include layout="@layout/component_section_header"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtBuscar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCategorias"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:clipToPadding="false"
-        android:paddingHorizontal="@dimen/spacing_medium"/>
+        <include layout="@layout/component_banner" />
 
-    <include layout="@layout/component_section_header"/>
+        <include layout="@layout/component_section_header" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvProductos"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"
-        android:padding="@dimen/spacing_medium"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCategorias"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/spacing_medium" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="24dp"/>
+        <include layout="@layout/component_section_header" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:padding="@dimen/spacing_medium" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -101,7 +101,7 @@ class DetalleProductoActivity : AppCompatActivity() {
         binding.btnComprar.setOnClickListener {
             Toast.makeText(
                 this,
-                "Compra realizada con éxito.",
+                "Redirigiendo a finalización de compra...",
                 Toast.LENGTH_SHORT
             ).show()
         }
