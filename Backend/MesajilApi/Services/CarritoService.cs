@@ -44,5 +44,19 @@ namespace MesajilApi.Services
         {
             return await _repository.EliminarAsync(id);
         }
+        public async Task<CarritoResponseDto> ObtenerOCrearPorUsuarioAsync(int idUsuario)
+        {
+            var carrito = await _repository.ObtenerPorUsuarioAsync(idUsuario);
+            if(carrito == null)
+            {
+                carrito = await _repository.CrearAsync(new Models.Carrito
+                {
+                    IdUsuario = idUsuario,
+                    FechaCreacion = DateTime.Now,
+                    Estado = true,
+                });
+            }
+            return CarritoMapper.ToResponseDto(carrito);
+        }
     }
 }

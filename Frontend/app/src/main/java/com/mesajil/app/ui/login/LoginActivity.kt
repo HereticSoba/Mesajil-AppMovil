@@ -9,11 +9,15 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import com.mesajil.app.MainActivity
+import androidx.lifecycle.lifecycleScope
+import com.mesajil.app.repository.CarritoRepository
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var viewModel: LoginViewModel
     private lateinit var sessionManager: SessionManager
+    private val carritoRepository = CarritoRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +52,21 @@ class LoginActivity : AppCompatActivity() {
                     response.idRol
                 )
                 sessionManager.guardarUltimoCorreo(response.correo)
-                Toast.makeText(this, "Bienvenido ${response.nombres}", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+                lifecycleScope.launch {
+                    val carrito = carritoRepository.obtenerOCrearCarrito(response.idUsuario)
+                    if (carrito != null) {
+                        sessionManager.guardarIdCarrito(carrito.idCarrito)
+                    }
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Bienvenido ${response.nombres}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    startActivity(
+                        Intent(this@LoginActivity, MainActivity::class.java)
+                    )
+                    finish()
+                }
             }
             result.onFailure {
                 Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()

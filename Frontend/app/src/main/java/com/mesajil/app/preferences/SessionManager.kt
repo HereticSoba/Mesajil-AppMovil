@@ -10,6 +10,7 @@ class SessionManager(context: Context) {
         private const val KEY_NOMBRES = "nombres"
         private const val KEY_CORREO = "correo"
         private const val KEY_ID_ROL = "idRol"
+        private const val KEY_ID_CARRITO = "idCarrito"
         private const val KEY_ULTIMO_CORREO = "ultimoCorreo"
     }
 
@@ -27,28 +28,33 @@ class SessionManager(context: Context) {
         }
     }
 
-    fun obtenerToken(): String? =
-        preferences.getString(KEY_TOKEN, null)
+    fun guardarIdCarrito(idCarrito: Int) {
+        preferences.edit().apply {
+            putInt(KEY_ID_CARRITO, idCarrito)
+            apply()
+        }
+    }
 
-    fun obtenerIdUsuario(): Int =
-        preferences.getInt(KEY_ID_USUARIO, 0)
+    fun obtenerToken(): String? = preferences.getString(KEY_TOKEN, null)
 
-    fun obtenerNombre(): String? =
-        preferences.getString(KEY_NOMBRES, "")
+    fun obtenerIdUsuario(): Int = preferences.getInt(KEY_ID_USUARIO, 0)
 
-    fun obtenerCorreo(): String? =
-        preferences.getString(KEY_CORREO, "")
+    fun obtenerNombre(): String? = preferences.getString(KEY_NOMBRES, "")
 
-    fun obtenerIdRol(): Int =
-        preferences.getInt(KEY_ID_ROL, 0)
+    fun obtenerCorreo(): String? = preferences.getString(KEY_CORREO, "")
+
+    fun obtenerIdRol(): Int = preferences.getInt(KEY_ID_ROL, 0)
+
+    fun obtenerIdCarrito(): Int = preferences.getInt(KEY_ID_CARRITO, 0)
 
     fun cerrarSesion() {
-        preferences.edit().apply{
+        preferences.edit().apply {
             remove(KEY_TOKEN)
             remove(KEY_ID_USUARIO)
             remove(KEY_NOMBRES)
             remove(KEY_CORREO)
             remove(KEY_ID_ROL)
+            remove(KEY_ID_CARRITO)
             apply()
         }
     }

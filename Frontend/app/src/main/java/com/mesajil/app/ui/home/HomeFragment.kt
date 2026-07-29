@@ -13,11 +13,15 @@ import com.mesajil.app.preferences.SessionManager
 import androidx.recyclerview.widget.GridLayoutManager
 import android.content.Intent
 import com.mesajil.app.ui.producto.DetalleProductoActivity
+import androidx.lifecycle.lifecycleScope
+import com.mesajil.app.repository.ProductoRepository
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var sessionManager: SessionManager
+    private val productoRepository = ProductoRepository()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,57 +33,35 @@ class HomeFragment : Fragment() {
         configurarRecycler()
         return binding.root
     }
+
     private fun configurarRecycler() {
-        val productos = listOf(
-            Producto(
-                1,
-                "Laptop Lenovo ThinkPad",
-                "Laptop empresarial",
-                2999.90,
-                10,
-                1
-            ),
-            Producto(
-                2,
-                "Mouse Logitech G203",
-                "Mouse gamer RGB",
-                129.90,
-                20,
-                2
-            ),
-            Producto(
-                3,
-                "Monitor Samsung 24''",
-                "Monitor Full HD",
-                699.90,
-                8,
-                3
+        viewLifecycleOwner.lifecycleScope.launch {
+            val productos = productoRepository.obtenerProductos()
+            val adapter = ProductoAdapter(
+                listaProductos = productos,
+                onProductoClick = { producto ->
+                    val intent = Intent(requireContext(), DetalleProductoActivity::class.java)
+                    intent.putExtra(DetalleProductoActivity.EXTRA_ID, producto.idProducto)
+                    intent.putExtra(DetalleProductoActivity.EXTRA_NOMBRE, producto.nombre)
+                    intent.putExtra(DetalleProductoActivity.EXTRA_DESCRIPCION, producto.descripcion)
+                    intent.putExtra(DetalleProductoActivity.EXTRA_PRECIO, producto.precio)
+                    intent.putExtra(DetalleProductoActivity.EXTRA_STOCK, producto.stock)
+                    startActivity(intent)
+                },
+                onAgregarClick = { producto ->
+                    Toast.makeText(
+                        requireContext(),
+                        "${producto.nombre} agregado al carrito",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             )
-        )
-        val adapter = ProductoAdapter(
-            listaProductos = productos,
-            onProductoClick = { producto ->
-                val intent = Intent(requireContext(), DetalleProductoActivity::class.java)
-                intent.putExtra(DetalleProductoActivity.EXTRA_ID, producto.idProducto)
-                intent.putExtra(DetalleProductoActivity.EXTRA_NOMBRE, producto.nombre)
-                intent.putExtra(DetalleProductoActivity.EXTRA_DESCRIPCION, producto.descripcion)
-                intent.putExtra(DetalleProductoActivity.EXTRA_PRECIO, producto.precio)
-                intent.putExtra(DetalleProductoActivity.EXTRA_STOCK, producto.stock)
-                startActivity(intent)
-            },
-            onAgregarClick = { producto ->
-                Toast.makeText(
-                    requireContext(),
-                    "${producto.nombre} agregado al carrito",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        )
-        binding.rvProductos.layoutManager = GridLayoutManager(requireContext(),2)
-        binding.rvProductos.adapter = adapter
-    }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+            binding.rvProductos.layoutManager = GridLayoutManager(requireContext(), 2)
+            binding.rvProductos.adapter = adapter
+        }
+//        override fun onDestroyView() {
+//            super.onDestroyView()
+//            _binding = null
+//        }
     }
 }

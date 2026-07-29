@@ -9,5 +9,6 @@ namespace MesajilApi.Repositories
         Task<Carrito> CrearAsync(Carrito carrito);
         Task<Carrito> ActualizarAsync(Carrito carrito);
         Task<bool> EliminarAsync(int id);
+        Task<Carrito?> ObtenerPorUsuarioAsync(int idUsuario);
     }
 }

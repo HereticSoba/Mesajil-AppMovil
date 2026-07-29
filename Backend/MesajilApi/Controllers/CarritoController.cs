@@ -54,5 +54,11 @@ namespace MesajilApi.Controllers
                 return NotFound();
             return NoContent();
         }
+        [HttpGet("usuario/{idUsuario}")]
+        public async Task<IActionResult> ObtenerOCrearPorUsuario(int idUsuario)
+        {
+            var carrito = await  _service.ObtenerOCrearPorUsuarioAsync(idUsuario);
+            return Ok(carrito);
+        }
     }
 }

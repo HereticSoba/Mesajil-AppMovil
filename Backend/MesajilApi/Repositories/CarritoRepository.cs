@@ -44,5 +44,11 @@ namespace MesajilApi.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<Carrito?> ObtenerPorUsuarioAsync(int idUsuario)
+        {
+            return await _context.Carritos
+                .Include(c => c.Usuario)
+                .FirstOrDefaultAsync(c => c.IdUsuario == idUsuario && c.Estado);
+        }
     }
 }
