@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".ui.registro.RegistroActivity">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <ImageView
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_marginTop="32dp"
+                android:contentDescription="Logo Mesajil"
+                android:src="@drawable/logomesajil" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Crear Cuenta"
+                android:textColor="@color/mesajil_blue"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Complete los datos para crear una cuenta"
+                android:textColor="@color/text_secondary"
+                android:textSize="16sp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="@color/mesajil_white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilNombres"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nombres"
+                        app:boxStrokeColor="@color/textfield_stroke"
+                        app:startIconDrawable="@drawable/ic_badge"
+                        app:startIconTint="@color/mesajil_blue">
+
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtNombres"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/mesajil_black"
+                            android:textColorHint="@color/text_secondary" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilApellidos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="Apellidos"
+                        app:boxStrokeColor="@color/textfield_stroke"
+                        app:startIconDrawable="@drawable/ic_badge"
+                        app:startIconTint="@color/mesajil_blue">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtApellidos"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/mesajil_black"
+                            android:textColorHint="@color/text_secondary" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilCorreo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="Correo Electrónico"
+                        app:boxStrokeColor="@color/textfield_stroke"
+                        app:startIconDrawable="@drawable/ic_mail"
+                        app:startIconTint="@color/mesajil_blue">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtCorreo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
+                            android:textColor="@color/mesajil_black"
+                            android:textColorHint="@color/text_secondary" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilTelefono"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="Teléfono"
+                        app:boxStrokeColor="@color/textfield_stroke"
+                        app:startIconDrawable="@drawable/ic_phone"
+                        app:startIconTint="@color/mesajil_blue">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtTelefono"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="phone"
+                            android:textColor="@color/mesajil_black"
+                            android:textColorHint="@color/text_secondary" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilDireccion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="Dirección"
+                        app:boxStrokeColor="@color/textfield_stroke"
+                        app:startIconDrawable="@drawable/ic_home"
+                        app:startIconTint="@color/mesajil_blue">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtDireccion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/mesajil_black"
+                            android:textColorHint="@color/text_secondary" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="Contraseña"
+                        app:boxStrokeColor="@color/textfield_stroke"
+                        app:endIconMode="password_toggle"
+                        app:startIconDrawable="@drawable/ic_lock"
+                        app:startIconTint="@color/mesajil_blue">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:textColor="@color/mesajil_black"
+                            android:textColorHint="@color/text_secondary" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilConfirmarPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="Confirmar contraseña"
+                        app:boxStrokeColor="@color/textfield_stroke"
+                        app:endIconMode="password_toggle"
+                        app:startIconDrawable="@drawable/ic_lock"
+                        app:startIconTint="@color/mesajil_blue">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtConfirmarPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:textColor="@color/mesajil_black"
+                            android:textColorHint="@color/text_secondary" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRegistrar"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="24dp"
+                        android:backgroundTint="@color/mesajil_blue"
+                        android:text="CREAR CUENTA"
+                        android:textAllCaps="false"
+                        android:textColor="@color/mesajil_white"
+                        app:cornerRadius="14dp" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="90dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="¿Ya tienes una cuenta? "
+                    android:textColor="@color/text_secondary" />
+
+                <TextView
+                    android:id="@+id/txtLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="4dp"
+                    android:text="INICIAR SESIÓN"
+                    android:textColor="@color/mesajil_blue"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

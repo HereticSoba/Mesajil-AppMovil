@@ -1,4 +1,4 @@
-﻿namespace MesajilApi.DTOs.Autenticador
+﻿namespace MesajilApi.DTOs.Autenticacion
 {
     public class LoginResponseDto
     {

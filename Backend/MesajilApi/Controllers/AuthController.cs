@@ -16,15 +16,34 @@ namespace MesajilApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UsuarioLoginDto dto)
         {
-            var resultado = await _authService.LoginAsync(dto);
-            if (resultado == null)
+            try
             {
-                return Unauthorized(new
+                var resultado = await _authService.LoginAsync(dto);
+                if (resultado == null)
                 {
-                    mensaje = "Correo o contraseña incorrectos."
-                });
+                    return Unauthorized(new
+                    {
+                        mensaje = "Correo o contraseña incorrectos."
+                    });
+                }
+                return Ok(resultado);
             }
-            return Ok(resultado);
+            catch (Exception ex)
+            {
+                return Unauthorized(new { mensaje = ex.Message });
+            }
+        }
+[HttpPost("registro")]
+        public async Task<IActionResult> Registrar([FromBody] UsuarioRegistroDto dto)
+        {
+            try { 
+                var resultado = await _authService.RegistrarAsync(dto);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
         }
     }
 }

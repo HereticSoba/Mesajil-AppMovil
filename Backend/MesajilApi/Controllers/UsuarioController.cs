@@ -1,6 +1,10 @@
 ﻿using MesajilApi.DTOs.Usuario;
 using MesajilApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Diagnostics;
 
 namespace MesajilApi.Controllers
 {
@@ -47,9 +51,22 @@ namespace MesajilApi.Controllers
             await _usuarioService.ActualizarAsync(dto);
             return NoContent();
         }
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Eliminar(int id)
         {
+            var idUsuarioToken = int.Parse(
+                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var idRolToken = int.Parse(
+                User.FindFirst("IdRol")!.Value);
+            if (idRolToken != 1 && idUsuarioToken != id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    mensaje = "No tienes permisos para eliminar esta cuenta."
+                });
+            }
             await _usuarioService.EliminarAsync(id);
             return NoContent();
         }

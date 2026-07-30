@@ -37,11 +37,10 @@ namespace MesajilApi.Repositories
         public async Task EliminarAsync(int id)
         {
             var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario != null)
-            {
-                _context.Usuarios.Remove(usuario);
-                await _context.SaveChangesAsync();
-            }
+            if (usuario == null)
+                return;
+            usuario.Estado = false;
+            await _context.SaveChangesAsync();
         }
         public async Task<Usuario?> ObtenerPorCorreoAsync(string correo)
         {

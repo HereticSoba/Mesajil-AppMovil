@@ -12,6 +12,7 @@ import com.mesajil.app.MainActivity
 import androidx.lifecycle.lifecycleScope
 import com.mesajil.app.repository.CarritoRepository
 import kotlinx.coroutines.launch
+import com.mesajil.app.ui.registro.RegistroActivity
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -41,6 +42,9 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             viewModel.login(correo, contrasena)
+        }
+        binding.txtRegistro.setOnClickListener {
+            startActivity(Intent(this, RegistroActivity::class.java))
         }
         viewModel.loginResult.observe(this) { result ->
             result.onSuccess { response ->

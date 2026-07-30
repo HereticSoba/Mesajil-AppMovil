@@ -31,7 +31,8 @@ class PerfilFragment : Fragment() {
         binding.txtCorreo.text = sessionManager.obtenerCorreo()
 
         binding.cardMiInformacion.setOnClickListener {
-            Toast.makeText(requireContext(), "Próximamente", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), MiInformacionActivity::class.java)
+            startActivity(intent)
         }
         binding.cardPedidos.setOnClickListener {
             Toast.makeText(requireContext(), "Próximamente", Toast.LENGTH_SHORT).show()
