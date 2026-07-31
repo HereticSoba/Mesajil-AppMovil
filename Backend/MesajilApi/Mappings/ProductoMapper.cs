@@ -43,6 +43,7 @@ namespace MesajilApi.Mappings
                 Marca = producto.Marca,
                 Modelo = producto.Modelo,
                 Precio = producto.Precio,
+                StockActual = producto.Inventario?.StockActual ?? 0,
                 Estado = producto.Estado,
                 FechaRegistro = producto.FechaRegistro,
             };

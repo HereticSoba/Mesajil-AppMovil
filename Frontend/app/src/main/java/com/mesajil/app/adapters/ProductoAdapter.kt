@@ -17,7 +17,18 @@ class ProductoAdapter(
         fun bind(producto: Producto) {
             binding.txtNombre.text = producto.nombre
             binding.txtPrecio.text = "S/. %.2f".format(producto.precio)
-            binding.txtStock.text = "Stock: ${producto.stock}"
+            binding.txtStock.text = when {
+                producto.stock <= 0 ->
+                    "Sin stock."
+
+                producto.stock <= 5 ->
+                    "¡Últimas unidades!"
+
+                else ->
+                    "En stock."
+            }
+            binding.btnAgregar.isEnabled = producto.stock > 0
+            binding.btnAgregar.text = if (producto.stock > 0) "Agregar" else "Sin stock"
             binding.root.setOnClickListener {
                 onProductoClick(producto)
             }
@@ -27,17 +38,19 @@ class ProductoAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup,viewType: Int): ProductoViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductoViewHolder {
         val binding = ItemProductoBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
-            false)
+            false
+        )
         return ProductoViewHolder(binding)
     }
 
     override fun onBindViewHolder(
         holder: ProductoViewHolder,
-        position: Int) {
+        position: Int
+    ) {
         holder.bind(listaProductos[position])
     }
 

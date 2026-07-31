@@ -29,6 +29,10 @@ namespace MesajilApi.Services
 
             bool passwordCorrecta = BCrypt.Net.BCrypt.Verify(
                 dto.Contrasena, usuario.Contrasena);
+            if(!passwordCorrecta)
+            {
+                throw new Exception("Correo o contraseña incorrectos.");
+            }
 
             var claims = new[]
             {

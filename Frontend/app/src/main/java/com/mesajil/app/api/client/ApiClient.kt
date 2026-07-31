@@ -10,6 +10,7 @@ import com.mesajil.app.api.interceptor.AuthInterceptor
 import com.mesajil.app.preferences.SessionProvider
 import okhttp3.OkHttpClient
 import com.mesajil.app.api.services.UsuarioService
+import com.mesajil.app.api.services.PedidoService
 
 object ApiClient {
     private const val BASE_URL = "http://192.168.100.54:5228/"
@@ -44,5 +45,8 @@ object ApiClient {
     }
     val usuarioService: UsuarioService by lazy {
         retrofit.create(UsuarioService::class.java)
+    }
+    val pedidoService: PedidoService by lazy {
+        retrofit.create(PedidoService::class.java)
     }
 }

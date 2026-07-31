@@ -9,5 +9,6 @@ namespace MesajilApi.Repositories
         Task<Pedido> CrearAsync(Pedido pedido);
         Task<Pedido> ActualizarAsync(Pedido pedido);
         Task<bool> EliminarAsync(int id);
+        Task<List<Pedido>> ObtenerPorUsuarioAsync(int idUsuario);
     }
 }

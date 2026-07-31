@@ -60,5 +60,13 @@ namespace MesajilApi.Repositories
                 .Include(d => d.Producto)
                 .FirstOrDefaultAsync(d => d.IdCarrito == idCarrito && d.IdProducto == idProducto);
         }
+        public async Task EliminarPorCarritoAsync(int idCarrito)
+        {
+            var detalles = await _context.DetalleCarritos
+                .Where(d => d.IdCarrito == idCarrito)
+                .ToListAsync();
+            _context.DetalleCarritos.RemoveRange(detalles);
+            await _context.SaveChangesAsync();
+        }
     }
 }

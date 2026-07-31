@@ -9,5 +9,6 @@ namespace MesajilApi.Repositories
         Task CrearAsync(Inventario inventario);
         Task ActualizarAsync(Inventario inventario);
         Task EliminarAsync(int id);
+        Task<Inventario?> ObtenerPorProductoAsync(int idProducto);
     }
 }

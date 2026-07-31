@@ -1,15 +1,31 @@
-﻿using MesajilApi.DTOs.Pedido;
+﻿using MesajilApi.Data;
+using MesajilApi.DTOs.Pedido;
 using MesajilApi.Mappings;
 using MesajilApi.Repositories;
+using MesajilApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MesajilApi.Services
 {
     public class PedidoService : IPedidoService
     {
         private readonly IPedidoRepository _repository;
-        public PedidoService(IPedidoRepository repository)
+        private readonly ICarritoRepository _carritoRepository;
+        private readonly IDetalleCarritoRepository _detalleCarritoRepository;
+        private readonly DbMesajilContext _context;
+        private readonly IInventarioRepository _inventarioRepository;
+        public PedidoService(
+            IPedidoRepository repository,
+            ICarritoRepository carritoRepository,
+            IDetalleCarritoRepository detalleCarritoRepository,
+            IInventarioRepository inventarioRepository,
+            DbMesajilContext context)
         {
             _repository = repository;
+            _carritoRepository = carritoRepository;
+            _detalleCarritoRepository = detalleCarritoRepository;
+            _inventarioRepository = inventarioRepository;
+            _context = context;
         }
         public async Task<List<PedidoResponseDto>> ObtenerTodosAsync()
         {
@@ -25,7 +41,7 @@ namespace MesajilApi.Services
         }
         public async Task<PedidoResponseDto> CrearAsync(PedidoCreateDto dto)
         {
-            if(dto.Total <= 0)
+            if (dto.Total <= 0)
             {
                 throw new ArgumentException("El total del pedido debe ser mayor a cero.");
             }
@@ -35,7 +51,7 @@ namespace MesajilApi.Services
         }
         public async Task<PedidoResponseDto?> ActualizarAsync(int id, PedidoUpdateDto dto)
         {
-            if(dto.Total <= 0)
+            if (dto.Total <= 0)
             {
                 throw new ArgumentException("El total del pedido debe ser mayor que cero.");
             }
@@ -52,6 +68,85 @@ namespace MesajilApi.Services
         public async Task<bool> EliminarAsync(int id)
         {
             return await _repository.EliminarAsync(id);
+        }
+        public async Task<PedidoFinalizadoResponseDto> FinalizarCompraAsync(int idUsuario)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var carrito = await _carritoRepository.ObtenerPorUsuarioAsync(idUsuario);
+                if (carrito == null)
+                    throw new Exception("No se encontró un carrito activo.");
+
+                var detalles = await _detalleCarritoRepository.ObtenerPorCarritoAsync(carrito.IdCarrito);
+                if (!detalles.Any())
+                    throw new Exception("El carrito está vacío.");
+                foreach(var item in detalles)
+                {
+                    var inventario = await _inventarioRepository
+                        .ObtenerPorProductoAsync(item.IdProducto);
+                    if (inventario == null)
+                        throw new Exception($"No existe inventario para el producto {item.IdProducto}."
+                        );
+                    if (inventario.StockActual < item.Cantidad)
+                        throw new Exception(
+                            $"Stock insuficiente para el producto {inventario.Producto!.Nombre}.");
+                    
+                }
+                decimal total = detalles.Sum(d => d.Subtotal);
+
+                var pedido = new Pedido
+                {
+                    IdUsuario = idUsuario,
+                    FechaPedido = DateTime.Now,
+                    Total = total,
+                    EstadoPedido = "Pendiente"
+                };
+                _context.Pedidos.Add(pedido);
+                await _context.SaveChangesAsync();
+                foreach (var item in detalles)
+                {
+                    _context.DetallePedidos.Add(new DetallePedido
+                    {
+                        IdPedido = pedido.IdPedido,
+                        IdProducto = item.IdProducto,
+                        Cantidad = item.Cantidad,
+                        PrecioUnitario = item.PrecioUnitario,
+                        Subtotal = item.Subtotal
+                    });
+                }
+                foreach (var item in detalles)
+                {
+                    var inventario = await _inventarioRepository.ObtenerPorProductoAsync(item.IdProducto);
+                    if(inventario != null)
+                    {
+                        inventario.StockActual -= item.Cantidad;
+                        inventario.UltimaActualizacion = DateTime.Now;
+                        await _inventarioRepository.ActualizarAsync(inventario);
+                    }
+                }
+                _context.DetalleCarritos.RemoveRange(detalles);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return new PedidoFinalizadoResponseDto
+                {
+                    IdPedido = pedido.IdPedido,
+                    Total = pedido.Total,
+                    Mensaje = "Pedido registrado exitosamente."
+                };
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+        public async Task<List<PedidoResponseDto>> ObtenerMisPedidosAsync(int idUsuario)
+        {
+            var pedidos = await _repository.ObtenerPorUsuarioAsync(idUsuario);
+            return PedidoMapper.ToResponseDtoList(pedidos);
         }
     }
 }

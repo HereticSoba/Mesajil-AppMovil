@@ -10,17 +10,12 @@ import android.content.Intent
 import com.mesajil.app.ui.login.LoginActivity
 import com.mesajil.app.preferences.SessionManager
 import android.widget.Toast
+import com.mesajil.app.ui.pedidos.HistorialPedidosActivity
 
 class PerfilFragment : Fragment() {
     private var _binding: FragmentPerfilBinding? = null
     private val binding get() = _binding!!
     private lateinit var sessionManager: SessionManager
-//    val rol = when(sessionManager.obtenerIdRol()){
-//        1 -> "Administrador"
-//        2 -> "Cliente"
-//        else -> "Usuario"
-//    }
-//    binding.txtRol.text = rol
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,7 +30,12 @@ class PerfilFragment : Fragment() {
             startActivity(intent)
         }
         binding.cardPedidos.setOnClickListener {
-            Toast.makeText(requireContext(), "Próximamente", Toast.LENGTH_SHORT).show()
+            startActivity(
+                Intent(
+                    requireContext(),
+                    HistorialPedidosActivity::class.java
+                )
+            )
         }
         binding.cardAcerca.setOnClickListener {
             Toast.makeText(

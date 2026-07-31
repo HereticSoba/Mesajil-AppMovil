@@ -17,6 +17,8 @@
         android:theme="@style/Theme.MesajilAppMovil"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity android:name=".ui.pedidos.HistorialPedidosActivity"
+            android:exported="false"/>
         <activity
             android:name=".ui.registro.RegistroActivity"
             android:exported="false" />

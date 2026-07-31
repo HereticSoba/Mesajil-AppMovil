@@ -16,5 +16,14 @@ namespace MesajilApi.Data
         public DbSet<DetalleCarrito> DetalleCarritos { get; set; }
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<DetallePedido> DetallePedidos { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Producto>()
+                .HasOne(p => p.Inventario)
+                .WithOne(i => i.Producto)
+                .HasForeignKey<Inventario>(i => i.IdProducto);
+        }
     }
 }

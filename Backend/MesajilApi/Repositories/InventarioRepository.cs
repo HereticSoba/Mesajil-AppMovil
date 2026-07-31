@@ -23,15 +23,21 @@ namespace MesajilApi.Repositories
                 .Include(i => i.Producto)
                 .FirstOrDefaultAsync(i => i.IdInventario == id);
         }
+        public async Task<Inventario?> ObtenerPorProductoAsync(int idProducto)
+        {
+            return await _context.Inventarios
+                .Include(i => i.Producto)
+                .FirstOrDefaultAsync(i => i.IdProducto == idProducto);
+        }
         public async Task CrearAsync(Inventario inventario)
         {
             _context.Inventarios.Add(inventario);
             await _context.SaveChangesAsync();
         }
-        public async Task ActualizarAsync(Inventario inventario)
+        public Task ActualizarAsync(Inventario inventario)
         {
             _context.Inventarios.Update(inventario);
-            await _context.SaveChangesAsync();
+            return Task.CompletedTask;
         }
         public async Task EliminarAsync(int id)
         {

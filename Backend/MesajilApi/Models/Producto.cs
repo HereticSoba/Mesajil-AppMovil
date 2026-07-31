@@ -29,5 +29,6 @@ namespace MesajilApi.Models
         public DateTime FechaRegistro { get; set; }
         [ForeignKey(nameof(IdCategoria))]
         public Categoria? Categoria { get; set; }
-    }
+        public Inventario? Inventario { get; set; }
+        }
 }

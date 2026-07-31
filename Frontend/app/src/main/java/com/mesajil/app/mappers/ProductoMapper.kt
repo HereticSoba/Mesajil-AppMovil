@@ -10,7 +10,7 @@ object ProductoMapper {
             nombre = response.nombre,
             descripcion = response.descripcion ?: "",
             precio = response.precio,
-            stock = 0,
+            stock = response.stockActual,
             idCategoria = response.idCategoria
         )
     }

@@ -44,5 +44,12 @@ namespace MesajilApi.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<List<Pedido>> ObtenerPorUsuarioAsync(int idUsuario)
+        {
+            return await _context.Pedidos
+                .Where(p => p.IdUsuario == idUsuario)
+                .OrderByDescending(p => p.FechaPedido)
+                .ToListAsync();
+        }
     }
 }

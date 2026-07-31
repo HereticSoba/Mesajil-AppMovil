@@ -1,8 +1,9 @@
 ﻿using MesajilApi.DTOs.Pedido;
-using MesajilApi.Repositories;
 using MesajilApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using MesajilApi.DTOs.Error;
 
 namespace MesajilApi.Controllers
 {
@@ -22,6 +23,13 @@ namespace MesajilApi.Controllers
             var pedidos = await _service.ObtenerTodosAsync();
             return Ok(pedidos);
         }
+        [HttpGet("mis-pedidos")]
+        public async Task<IActionResult> ObtenerMisPedidos()
+        {
+            var idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var pedidos = await _service.ObtenerMisPedidosAsync(idUsuario);
+            return Ok(pedidos);
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> ObtenerPorId(int id)
         {
@@ -39,6 +47,23 @@ namespace MesajilApi.Controllers
                 new { id = pedido.IdPedido },
                 pedido);
         }
+        [HttpPost("finalizar")]
+        public async Task<IActionResult> FinalizarCompra()
+        {
+            try
+            {
+                var idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                var resultado = await _service.FinalizarCompraAsync(idUsuario);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponseDto
+                {
+                    Mensaje = ex.Message
+                });
+            }
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> Actualizar(int id, PedidoUpdateDto dto)
         {
@@ -55,5 +80,6 @@ namespace MesajilApi.Controllers
                 return NotFound();
             return NoContent();
         }
+
     }
 }
