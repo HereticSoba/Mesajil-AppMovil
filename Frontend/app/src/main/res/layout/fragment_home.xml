@@ -61,9 +61,22 @@
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFiltrar"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/spacing_large"
+            android:text="Filtrar"
+            app:icon="@android:drawable/ic_menu_sort_by_size"/>
+
         <include layout="@layout/component_banner" />
 
-        <include layout="@layout/component_section_header" />
+        <include
+            android:id="@+id/headerCategorias"
+            layout="@layout/component_section_header" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCategorias"
@@ -72,7 +85,9 @@
             android:clipToPadding="false"
             android:paddingHorizontal="@dimen/spacing_medium" />
 
-        <include layout="@layout/component_section_header" />
+        <include
+            android:id="@+id/headerProductos"
+            layout="@layout/component_section_header" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvProductos"

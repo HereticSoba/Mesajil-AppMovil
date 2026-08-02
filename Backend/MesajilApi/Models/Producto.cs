@@ -30,5 +30,7 @@ namespace MesajilApi.Models
         [ForeignKey(nameof(IdCategoria))]
         public Categoria? Categoria { get; set; }
         public Inventario? Inventario { get; set; }
+        public ICollection<ImagenProducto> Imagenes { get; set; }
+            = new List<ImagenProducto>();
         }
 }

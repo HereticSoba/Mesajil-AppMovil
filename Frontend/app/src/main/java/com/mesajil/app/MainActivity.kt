@@ -16,17 +16,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val fragmentContainer = findViewById<FragmentContainerView>(R.id.fragmentController)
-        ViewCompat.setOnApplyWindowInsetsListener(fragmentContainer){view, insets -> val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-        view.setPadding(0, systemBars.top, 0, 0)
-            insets}
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentController, HomeFragment())
-                .commit()
+        ViewCompat.setOnApplyWindowInsetsListener(fragmentContainer) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, systemBars.top, 0, 0)
+            insets
         }
+
         bottomNavigation.setOnItemSelectedListener { item ->
-            val fragment = when(item.itemId){
+            val fragment = when (item.itemId) {
                 R.id.nav_home -> HomeFragment()
                 R.id.nav_categorias -> CategoriasFragment()
                 R.id.nav_carrito -> CarritoFragment()
@@ -37,6 +35,15 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.fragmentController, fragment)
                 .commit()
             true
+        }
+        if (savedInstanceState == null) {
+            val abrirCarrito = intent.getBooleanExtra("abrir_carrito", false)
+
+            if (abrirCarrito) {
+                bottomNavigation.selectedItemId = R.id.nav_carrito
+            } else {
+                bottomNavigation.selectedItemId = R.id.nav_home
+            }
         }
     }
 }

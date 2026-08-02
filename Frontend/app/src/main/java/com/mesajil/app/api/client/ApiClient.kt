@@ -7,6 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import com.mesajil.app.api.services.CarritoService
 import com.mesajil.app.api.services.DetalleCarritoService
 import com.mesajil.app.api.interceptor.AuthInterceptor
+import com.mesajil.app.api.services.CategoriaService
 import com.mesajil.app.preferences.SessionProvider
 import okhttp3.OkHttpClient
 import com.mesajil.app.api.services.UsuarioService
@@ -48,5 +49,8 @@ object ApiClient {
     }
     val pedidoService: PedidoService by lazy {
         retrofit.create(PedidoService::class.java)
+    }
+    val categoriaService: CategoriaService by lazy {
+        retrofit.create(CategoriaService::class.java)
     }
 }

@@ -40,7 +40,8 @@ namespace MesajilApi.Mappings
                 Cantidad = detalle.Cantidad,
                 PrecioUnitario = detalle.PrecioUnitario,
                 Subtotal = detalle.Subtotal,
-                Stock = detalle.Producto.Inventario?.StockActual ?? 0
+                Stock = detalle.Producto.Inventario?.StockActual ?? 0,
+                UrlImagen = detalle.Producto.Imagenes?.FirstOrDefault(i => i.Principal)?.UrlImagen
             };
         }
         public static List<DetalleCarritoResponseDto> ToResponseDtoList(List<Models.DetalleCarrito> detalles)

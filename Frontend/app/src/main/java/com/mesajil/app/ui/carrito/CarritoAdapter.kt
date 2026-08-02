@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mesajil.app.databinding.ItemCarritoBinding
 import com.mesajil.app.models.response.DetalleCarritoResponse
+import com.bumptech.glide.Glide
+import com.mesajil.app.R
 
 class CarritoAdapter(
     private val productos: MutableList<DetalleCarritoResponse>,
@@ -37,6 +39,16 @@ class CarritoAdapter(
             txtPrecio.text = "S/. %.2f".format(producto.precioUnitario)
             txtCantidad.text = producto.cantidad.toString()
             txtSubtotal.text = "Subtotal: S/. %.2f".format(producto.subtotal)
+            if(!producto.urlImagen.isNullOrBlank()){
+                val urlCompleta = "http://192.168.100.54:5228${producto.urlImagen}"
+                Glide.with(root.context)
+                    .load(urlCompleta)
+                    .placeholder(R.drawable.ic_producto)
+                    .error(R.drawable.ic_producto)
+                    .into(imgProducto)
+            }else{
+                imgProducto.setImageResource(R.drawable.ic_producto)
+            }
 
             btnMas.setOnClickListener {
                 onAumentar(producto)

@@ -44,6 +44,7 @@ namespace MesajilApi.Mappings
                 Modelo = producto.Modelo,
                 Precio = producto.Precio,
                 StockActual = producto.Inventario?.StockActual ?? 0,
+                UrlImagen = producto.Imagenes.FirstOrDefault(i => i.Principal)?.UrlImagen,
                 Estado = producto.Estado,
                 FechaRegistro = producto.FechaRegistro,
             };

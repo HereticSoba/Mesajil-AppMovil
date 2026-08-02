@@ -11,7 +11,10 @@ object ProductoMapper {
             descripcion = response.descripcion ?: "",
             precio = response.precio,
             stock = response.stockActual,
-            idCategoria = response.idCategoria
+            idCategoria = response.idCategoria,
+            marca = response.marca,
+            modelo = response.modelo,
+            urlImagen = response.urlImagen
         )
     }
 }

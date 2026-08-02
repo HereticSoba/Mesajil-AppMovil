@@ -12,5 +12,6 @@
         public decimal PrecioUnitario { get; set; }
         public decimal Subtotal { get; set; }
         public int Stock { get; set; }
+        public string? UrlImagen { get; set; }
     }
 }

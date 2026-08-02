@@ -16,6 +16,7 @@ namespace MesajilApi.Repositories
             return await _context.Productos
                 .Include(p => p.Categoria)
                 .Include(p => p.Inventario)
+                .Include(p => p.Imagenes)
                 .ToListAsync();
         }
         public async Task<Producto?> ObtenerPorIdAsync(int id)
@@ -23,6 +24,7 @@ namespace MesajilApi.Repositories
             return await _context.Productos
                 .Include (p => p.Categoria)
                 .Include (p => p.Inventario)
+                .Include (p => p.Imagenes)
                 .FirstOrDefaultAsync(P => P.IdProducto == id);
         }
         public async Task<Producto> CrearAsync(Producto producto)

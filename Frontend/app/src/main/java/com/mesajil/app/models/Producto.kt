@@ -6,5 +6,8 @@ data class Producto (
     val descripcion: String,
     val precio: Double,
     val stock: Int,
-    val idCategoria: Int
+    val idCategoria: Int,
+    val marca: String,
+    val modelo: String,
+    val urlImagen: String?
 )

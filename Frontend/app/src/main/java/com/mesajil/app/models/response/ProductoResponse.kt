@@ -9,6 +9,7 @@ data class ProductoResponse (
     val modelo: String,
     val precio: Double,
     val stockActual: Int,
+    val urlImagen: String?,
     val estado: Boolean,
     val fechaRegistro: String
 )
