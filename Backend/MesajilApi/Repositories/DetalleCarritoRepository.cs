@@ -16,6 +16,7 @@ namespace MesajilApi.Repositories
             return await _context.DetalleCarritos
                 .Include(d => d.Carrito)
                 .Include(d => d.Producto)
+                .ThenInclude(p => p!.Inventario)
                 .ToListAsync();
         }
         public async Task<DetalleCarrito?> ObtenerPorIdAsync(int id)
@@ -23,6 +24,7 @@ namespace MesajilApi.Repositories
             return await _context.DetalleCarritos
                 .Include(d => d.Carrito)
                 .Include(d => d.Producto)
+                .ThenInclude(p => p!.Inventario)
                 .FirstOrDefaultAsync(d => d.IdDetalleCarrito == id);
         }
         public async Task<DetalleCarrito> CrearAsync(DetalleCarrito detalle)
@@ -51,6 +53,7 @@ namespace MesajilApi.Repositories
             return await _context.DetalleCarritos
                 .Include(d => d.Carrito)
                 .Include(d => d.Producto)
+                .ThenInclude(p => p!.Inventario)
                 .Where(d => d.IdCarrito == idCarrito)
                 .ToListAsync();
         }
@@ -58,6 +61,7 @@ namespace MesajilApi.Repositories
         {
             return await _context.DetalleCarritos
                 .Include(d => d.Producto)
+                .ThenInclude(p => p!.Inventario)
                 .FirstOrDefaultAsync(d => d.IdCarrito == idCarrito && d.IdProducto == idProducto);
         }
         public async Task EliminarPorCarritoAsync(int idCarrito)

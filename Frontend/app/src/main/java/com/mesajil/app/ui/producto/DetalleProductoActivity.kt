@@ -98,6 +98,14 @@ class DetalleProductoActivity : AppCompatActivity() {
         }
         binding.btnAgregarCarrito.setOnClickListener {
             lifecycleScope.launch {
+                if (stock <= 0) {
+                    Toast.makeText(
+                        this@DetalleProductoActivity,
+                        "Producto sin stock.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@launch
+                }
                 val idCarrito = sessionManager.obtenerIdCarrito()
                 if (idCarrito == 0) {
                     Toast.makeText(
@@ -112,6 +120,14 @@ class DetalleProductoActivity : AppCompatActivity() {
                     idProducto
                 )
                 if (existente == null) {
+                    if (cantidad > stock) {
+                        Toast.makeText(
+                            this@DetalleProductoActivity,
+                            "No hay suficiente stock disponible.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@launch
+                    }
                     val request = DetalleCarritoRequest(
                         idCarrito = idCarrito,
                         idProducto = idProducto,
@@ -119,10 +135,11 @@ class DetalleProductoActivity : AppCompatActivity() {
                         precioUnitario = precio
                     )
                     val resultado = detalleCarritoRepository.crear(request)
+
                     if (resultado != null) {
                         Toast.makeText(
                             this@DetalleProductoActivity,
-                            "$cantidad unidad(es) agregadas al carrito.",
+                            "$cantidad unidade(es) agregadas al carrito.",
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
@@ -133,19 +150,11 @@ class DetalleProductoActivity : AppCompatActivity() {
                         ).show()
                     }
                 } else {
-                    if (stock <= 0) {
-                        Toast.makeText(
-                            this@DetalleProductoActivity,
-                            "Producto sin stock.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@launch
-                    }
                     val nuevaCantidad = existente.cantidad + cantidad
                     if (nuevaCantidad > stock) {
                         Toast.makeText(
                             this@DetalleProductoActivity,
-                            "No hay suficiente stock.",
+                            "No hay suficiente stock disponible.",
                             Toast.LENGTH_SHORT
                         ).show()
                         return@launch
@@ -153,7 +162,7 @@ class DetalleProductoActivity : AppCompatActivity() {
                     val request = DetalleCarritoRequest(
                         idCarrito = existente.idCarrito,
                         idProducto = existente.idProducto,
-                        cantidad = existente.cantidad + cantidad,
+                        cantidad = nuevaCantidad,
                         precioUnitario = existente.precioUnitario
                     )
                     val actualizado = detalleCarritoRepository.actualizar(
@@ -163,7 +172,7 @@ class DetalleProductoActivity : AppCompatActivity() {
                     if (actualizado) {
                         Toast.makeText(
                             this@DetalleProductoActivity,
-                            "Cantidad actualizada.",
+                            "Cantidad actualizada a $nuevaCantidad.",
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {

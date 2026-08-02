@@ -16,15 +16,26 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import com.mesajil.app.viewmodel.PedidoViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mesajil.app.models.request.DetalleCarritoRequest
 
 class CarritoFragment : Fragment() {
     private var _binding: FragmentCarritoBinding? = null
     private val binding get() = _binding!!
     private val carritoAdapter by lazy {
-        CarritoAdapter(mutableListOf()){producto ->
-            eliminarProducto(producto)
-        }
+        CarritoAdapter(
+            productos = mutableListOf(),
+            onAumentar = { producto ->
+                aumentarCantidad(producto)
+            },
+            onDisminuir = { producto ->
+                disminuirCantidad(producto)
+            },
+            onEliminar = { producto ->
+                eliminarProducto(producto)
+            }
+        )
     }
+
     private val detalleCarritoRepository = DetalleCarritoRepository()
     private val pedidoViewModel: PedidoViewModel by viewModels()
     override fun onCreateView(
@@ -47,6 +58,66 @@ class CarritoFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun aumentarCantidad(producto: DetalleCarritoResponse) {
+        if(producto.cantidad >= producto.stock){
+            Toast.makeText(
+                requireContext(),
+                "Stock máximo alcanzado.",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            val request = DetalleCarritoRequest(
+                idCarrito = producto.idCarrito,
+                idProducto = producto.idProducto,
+                cantidad = producto.cantidad + 1,
+                precioUnitario = producto.precioUnitario
+            )
+            val actualizado = detalleCarritoRepository.actualizar(
+                producto.idDetalleCarrito,
+                request
+            )
+            if (actualizado) {
+                cargarCarrito()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "No se pudo aumentar la cantidad.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun disminuirCantidad(producto: DetalleCarritoResponse) {
+        if (producto.cantidad <= 1) {
+            eliminarProducto(producto)
+            return
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            val request = DetalleCarritoRequest(
+                idCarrito = producto.idCarrito,
+                idProducto = producto.idProducto,
+                cantidad = producto.cantidad - 1,
+                precioUnitario = producto.precioUnitario
+            )
+            val actualizado = detalleCarritoRepository.actualizar(
+                producto.idDetalleCarrito,
+                request
+            )
+            if (actualizado) {
+                cargarCarrito()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "No se pudo disminuir la cantidad.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun cargarCarrito() {

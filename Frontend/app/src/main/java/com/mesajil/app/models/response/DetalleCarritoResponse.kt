@@ -9,5 +9,6 @@ data class DetalleCarritoResponse(
     val modelo: String,
     val cantidad: Int,
     val precioUnitario: Double,
-    val subtotal: Double
+    val subtotal: Double,
+    val stock: Int
 )

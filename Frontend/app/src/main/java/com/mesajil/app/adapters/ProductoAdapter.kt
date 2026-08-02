@@ -19,13 +19,13 @@ class ProductoAdapter(
             binding.txtPrecio.text = "S/. %.2f".format(producto.precio)
             binding.txtStock.text = when {
                 producto.stock <= 0 ->
-                    "Sin stock."
+                    "Sin stock"
 
                 producto.stock <= 5 ->
-                    "¡Últimas unidades!"
+                    "¡Últimas $producto.stock unidades!"
 
                 else ->
-                    "En stock."
+                    "Stock: ${producto.stock}"
             }
             binding.btnAgregar.isEnabled = producto.stock > 0
             binding.btnAgregar.text = if (producto.stock > 0) "Agregar" else "Sin stock"

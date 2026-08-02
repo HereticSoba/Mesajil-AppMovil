@@ -52,6 +52,14 @@ class HomeFragment : Fragment() {
                 },
                 onAgregarClick = { producto ->
                     viewLifecycleOwner.lifecycleScope.launch {
+                        if(producto.stock <= 0){
+                            Toast.makeText(
+                                requireContext(),
+                                "Producto sin stock.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@launch
+                        }
                         val idCarrito = sessionManager.obtenerIdCarrito()
                         if (idCarrito == 0) {
                             Toast.makeText(
@@ -87,6 +95,14 @@ class HomeFragment : Fragment() {
                                 ).show()
                             }
                         } else {
+                            if(existente.cantidad >= producto.stock){
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Stock máximo alcanzado.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                return@launch
+                            }
                             val request = DetalleCarritoRequest(
                                 idCarrito = existente.idCarrito,
                                 idProducto = existente.idProducto,
