@@ -87,6 +87,7 @@ builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IPedidoService, PedidoService>();
 builder.Services.AddScoped<IDetallePedidoRepository, DetallePedidoRepository>();
 builder.Services.AddScoped<IDetallePedidoService, DetallePedidoService>();
+builder.Services.AddHttpClient<IPagoService, PagoService>();
 
 var app = builder.Build();
 

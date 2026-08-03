@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true"
+    tools:context=".ui.pago.PagoActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/mesajil_white"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="Pago"
+            app:titleTextColor="@color/text_primary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_large">
+
+            <TextView
+                style="@style/SectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total a pagar" />
+
+            <TextView
+                android:id="@+id/txtTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:text="S/. 0.00"
+                android:textColor="@color/mesajil_blue"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="@dimen/spacing_large"
+                android:background="@color/divider" />
+
+            <TextView
+                style="@style/SectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Datos de pago" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:text="Ingrese los datos de su tarjeta para proceder con la compra"
+                android:textColor="@color/text_secondary" />
+
+            <!--mercadopago-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:text="Número de tarjeta"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:background="@drawable/bg_payment_field"
+                android:paddingHorizontal="12dp">
+
+                <com.mercadopago.sdk.android.coremethods.ui.components.textfield.cardnumber.xml.CardNumberTextField
+                    android:id="@+id/cardNumberField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    app:cursorColor="@color/mesajil_blue"
+                    app:maxLength="16"
+                    app:readOnly="false" />
+
+            </FrameLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vencimiento (MM/AA)"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:background="@drawable/bg_payment_field"
+                        android:paddingHorizontal="12dp">
+
+                        <com.mercadopago.sdk.android.coremethods.ui.components.textfield.expirationdate.xml.ExpirationDateTextField
+                            android:id="@+id/expirationDateField"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            app:cursorColor="@color/mesajil_blue"
+                            app:readOnly="false" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="@dimen/spacing_medium"
+                    android:layout_height="1dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CVV"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:background="@drawable/bg_payment_field"
+                        android:paddingHorizontal="12dp">
+
+                        <com.mercadopago.sdk.android.coremethods.ui.components.textfield.securitycode.xml.SecurityCodeTextField
+                            android:id="@+id/securityCodeField"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            app:cursorColor="@color/mesajil_blue"
+                            app:readOnly="false" />
+
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPagar"
+                style="@style/PrimaryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:enabled="false"
+                android:text="Pagar"
+                android:textAllCaps="false" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

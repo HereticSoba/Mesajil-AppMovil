@@ -48,12 +48,13 @@ namespace MesajilApi.Controllers
                 pedido);
         }
         [HttpPost("finalizar")]
-        public async Task<IActionResult> FinalizarCompra()
+        public async Task<IActionResult> FinalizarCompra(
+            [FromBody] FinalizarCompraDto dto)
         {
             try
             {
                 var idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                var resultado = await _service.FinalizarCompraAsync(idUsuario);
+                var resultado = await _service.FinalizarCompraAsync(idUsuario, dto);
                 return Ok(resultado);
             }
             catch (Exception ex)

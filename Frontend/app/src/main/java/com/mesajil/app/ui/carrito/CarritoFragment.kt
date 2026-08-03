@@ -13,10 +13,10 @@ import com.mesajil.app.preferences.SessionManager
 import kotlinx.coroutines.launch
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.viewModels
-import com.mesajil.app.viewmodel.PedidoViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mesajil.app.models.request.DetalleCarritoRequest
+import android.content.Intent
+import com.mesajil.app.ui.checkout.CheckoutActivity
 
 class CarritoFragment : Fragment() {
     private var _binding: FragmentCarritoBinding? = null
@@ -37,7 +37,6 @@ class CarritoFragment : Fragment() {
     }
 
     private val detalleCarritoRepository = DetalleCarritoRepository()
-    private val pedidoViewModel: PedidoViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,9 +47,12 @@ class CarritoFragment : Fragment() {
             adapter = carritoAdapter
         }
         cargarCarrito()
-        observarPedido()
         binding.btnProcederPago.setOnClickListener {
-            confirmarCompra()
+            val intent = Intent(
+                requireContext(),
+                CheckoutActivity::class.java
+            )
+            startActivity(intent)
         }
         return binding.root
     }
@@ -140,50 +142,6 @@ class CarritoFragment : Fragment() {
     private fun actualizarTotal(detalles: List<DetalleCarritoResponse>) {
         val total = detalles.sumOf { it.subtotal }
         binding.txtTotal.text = "S/. %.2f".format(total)
-    }
-
-    private fun confirmarCompra() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Confirmar compra")
-            .setMessage("¿Desea finalizar la compra?")
-            .setNegativeButton("Cancelar", null)
-            .setPositiveButton("Aceptar") { _, _ ->
-                binding.btnProcederPago.isEnabled = false
-                binding.btnProcederPago.text = "Procesando..."
-
-                pedidoViewModel.finalizarCompra()
-            }
-            .show()
-    }
-
-    private fun observarPedido() {
-        pedidoViewModel.resultado.observe(viewLifecycleOwner) { result ->
-            result.onSuccess { response ->
-                binding.btnProcederPago.isEnabled = true
-                binding.btnProcederPago.text = "Finalizar compra"
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Compra realizada")
-                    .setMessage(
-                        "${response.mensaje}\n\n" +
-                                "N° Pedido: ${response.idPedido}\n" +
-                                "Total: S/. %.2f".format(response.total)
-                    )
-                    .setPositiveButton("Aceptar") { _, _ ->
-                        binding.txtTotal.text = "S/. 0.00"
-                        cargarCarrito()
-                    }
-                    .show()
-            }
-            result.onFailure { error ->
-                binding.btnProcederPago.isEnabled = true
-                binding.btnProcederPago.text = "Finalizar compra"
-                AlertDialog.Builder(requireContext())
-                    .setTitle("No se pudo finalizar la compra.")
-                    .setMessage(error.message)
-                    .setPositiveButton("Aceptar", null)
-                    .show()
-            }
-        }
     }
 
     private fun eliminarProducto(

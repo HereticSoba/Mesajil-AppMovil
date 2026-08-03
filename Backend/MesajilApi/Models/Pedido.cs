@@ -14,6 +14,16 @@ namespace MesajilApi.Models
         public decimal Total {  get; set; }
         [StringLength(30)]
         public string EstadoPedido { get; set; } = string.Empty;
+        [StringLength(20)]
+        public string TipoEntrega { get; set; } = string.Empty;
+        [StringLength(200)]
+        public string? DireccionEntrega { get; set; }
+        [StringLength(100)]
+        public string? TiendaRecojo { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal CostoEnvio { get; set; }
+        [StringLength(30)]
+        public string EstadoPago { get; set; } = string.Empty;
         [ForeignKey(nameof(IdUsuario))]
         public Usuario? Usuario { get; set; }
     }

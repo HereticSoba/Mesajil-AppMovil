@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.mesajil.app.models.request.FinalizarCompraRequest
 import com.mesajil.app.models.response.ErrorResponse
 import com.mesajil.app.models.response.PedidoFinalizadoResponse
 import com.mesajil.app.models.response.PedidoResponse
@@ -19,10 +20,10 @@ class PedidoViewModel : ViewModel() {
     val resultado: LiveData<Result<PedidoFinalizadoResponse>> = _resultado
     val pedidos: LiveData<List<PedidoResponse>> = _pedidos
 
-    fun finalizarCompra() {
+    fun finalizarCompra(request: FinalizarCompraRequest) {
         viewModelScope.launch {
             try {
-                val response = repository.finalizarCompra()
+                val response = repository.finalizarCompra(request)
                 if (response.isSuccessful && response.body() != null) {
                     _resultado.value = Result.success(response.body()!!)
                 } else {

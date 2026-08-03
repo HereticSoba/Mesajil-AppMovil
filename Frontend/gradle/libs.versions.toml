@@ -17,6 +17,8 @@ swiperefreshlayout = "1.1.0"
 circleimageview = "3.1.0"
 okhttp-logging = "4.12.0"
 fragment = "1.8.9"
+mercadoPagoSdkBomVersion = "1.0.0"
+visionInternalVkp = "18.2.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,8 +39,12 @@ androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "s
 circleimageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circleimageview" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp-logging" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment" }
+mercadopago-sdk-bom = { group = "com.mercadopago.android.sdk", name = "sdk-android-bom", version.ref = "mercadoPagoSdkBomVersion" }
+mercadopago-sdk-coreMethods = { group = "com.mercadopago.android.sdk", name = "core-methods" }
+vision-internal-vkp = { group = "com.google.mlkit", name = "vision-internal-vkp", version.ref = "visionInternalVkp" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 

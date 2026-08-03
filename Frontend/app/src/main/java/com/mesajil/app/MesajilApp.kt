@@ -1,6 +1,8 @@
 package com.mesajil.app
 
 import android.app.Application
+import com.mercadopago.sdk.android.domain.model.CountryCode
+import com.mercadopago.sdk.android.initializer.MercadoPagoSDK
 import com.mesajil.app.preferences.SessionProvider
 
 class MesajilApp : Application() {
@@ -13,5 +15,11 @@ class MesajilApp : Application() {
         super.onCreate()
         instance = this
         SessionProvider.init(this)
+
+        MercadoPagoSDK.initialize(
+            context = this,
+            publicKey = BuildConfig.MERCADO_PAGO_PUBLIC_KEY,
+            countryCode = CountryCode.PER
+        )
     }
 }

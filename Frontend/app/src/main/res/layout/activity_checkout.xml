@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/mesajil_white"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="Finalizar compra"
+            app:titleTextColor="@color/text_primary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_large">
+
+            <TextView
+                style="@style/SectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿Cómo deseas recibir tu pedido?" />
+
+            <RadioGroup
+                android:id="@+id/rgTipoEntrega"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rbDelivery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Delivery" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rbRecojo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Recojo en tienda" />
+            </RadioGroup>
+            <TextView
+                android:id="@+id/txtErrorTipoEntrega"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Seleccione un tipo de entrega"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:visibility="gone"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutDireccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:hint="Dirección de entrega"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtDireccion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPostalAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardRecojo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:visibility="gone"
+                app:cardCornerRadius="@dimen/corner_radius_large"
+                app:cardElevation="@dimen/card_elevation">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_large">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mesajil - Compuplaza Lima"
+                        android:textColor="@color/text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="Av. Garcilaso de la Vega 1251, Lima"
+                        android:textColor="@color/text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="@dimen/spacing_large"
+                android:background="@color/divider" />
+
+            <TextView
+                style="@style/SectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Resumen de compra" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Subtotal"
+                    android:textColor="@color/text_secondary" />
+
+                <TextView
+                    android:id="@+id/txtSubtotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S/. 0.00"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Envío"
+                    android:textColor="@color/text_secondary" />
+
+                <TextView
+                    android:id="@+id/txtEnvio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S/. 0.00"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Total"
+                    android:textColor="@color/text_primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S/. 0.00"
+                    android:textColor="@color/mesajil_blue"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnContinuar"
+                style="@style/PrimaryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:text="Continuar al pago"
+                android:textAllCaps="false" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

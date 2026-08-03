@@ -69,11 +69,40 @@ namespace MesajilApi.Services
         {
             return await _repository.EliminarAsync(id);
         }
-        public async Task<PedidoFinalizadoResponseDto> FinalizarCompraAsync(int idUsuario)
+        public async Task<PedidoFinalizadoResponseDto> FinalizarCompraAsync(int idUsuario, FinalizarCompraDto dto)
         {
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
+                var tipoEntrega = dto.TipoEntrega.Trim();
+                if(!tipoEntrega.Equals("Delivery", StringComparison.OrdinalIgnoreCase) &&
+                   !tipoEntrega.Equals("Recojo", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new ArgumentException("El tipo de entrega debe ser Delivery o Recojo.");
+                }
+                tipoEntrega = tipoEntrega.Equals(
+                    "Delivery",
+                    StringComparison.OrdinalIgnoreCase) ? "Delivery" : "Recojo";
+
+                decimal costoEnvio;
+                string? direccionEntrega;
+                string? tiendaRecojo;
+                if (tipoEntrega == "Delivery")
+                {
+                    if(string.IsNullOrWhiteSpace(dto.DireccionEntrega))
+                    {
+                        throw new Exception("Debe ingresar una dirección para el delivery.");
+                    }
+                    costoEnvio = 10.00m;
+                    direccionEntrega = dto.DireccionEntrega.Trim();
+                    tiendaRecojo = null;
+                }
+                else
+                {
+                    costoEnvio = 0.00m;
+                    direccionEntrega = null;
+                    tiendaRecojo = "Mesajil - Compuplaza Lima";
+                }
                 var carrito = await _carritoRepository.ObtenerPorUsuarioAsync(idUsuario);
                 if (carrito == null)
                     throw new Exception("No se encontró un carrito activo.");
@@ -93,14 +122,21 @@ namespace MesajilApi.Services
                             $"Stock insuficiente para el producto {inventario.Producto!.Nombre}.");
                     
                 }
-                decimal total = detalles.Sum(d => d.Subtotal);
+                decimal subtotal = detalles.Sum(d => d.Subtotal);
+                decimal total = subtotal + costoEnvio;
 
                 var pedido = new Pedido
                 {
                     IdUsuario = idUsuario,
                     FechaPedido = DateTime.Now,
                     Total = total,
-                    EstadoPedido = "Pendiente"
+                    EstadoPedido = "Pendiente",
+                    TipoEntrega = tipoEntrega,
+                    DireccionEntrega = direccionEntrega,
+                    TiendaRecojo = tiendaRecojo,
+                    CostoEnvio = costoEnvio,
+                    //De prueba hasta integrar pasarela
+                    EstadoPago = "Pendiente"
                 };
                 _context.Pedidos.Add(pedido);
                 await _context.SaveChangesAsync();

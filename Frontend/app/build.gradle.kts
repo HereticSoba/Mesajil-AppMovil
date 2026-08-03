@@ -1,7 +1,19 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
 }
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if(localPropertiesFile.exists()){
+    localPropertiesFile.inputStream().use {
+        localProperties.load(it)
+    }
+}
+val mercadoPagoPublicKey = localProperties.getProperty("MERCADO_PAGO_PUBLIC_KEY") ?: ""
 
 android {
     namespace = "com.mesajil.app"
@@ -15,6 +27,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "MERCADO_PAGO_PUBLIC_KEY", "\"$mercadoPagoPublicKey\"")
     }
 
     buildTypes {
@@ -35,12 +48,21 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
+        compose = true
     }
 }
 
 dependencies {
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    //MercadoPago
+    implementation(platform(libs.mercadopago.sdk.bom))
+    implementation(libs.mercadopago.sdk.coreMethods)
+    // Jetpack Compose - para que los componentes de MercadoPago funcionen
+    implementation(platform("androidx.compose:compose-bom:2024.12.01"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
     //AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -68,6 +90,7 @@ dependencies {
 
     //CircleImageView
     implementation(libs.circleimageview)
+    implementation(libs.vision.internal.vkp)
 
     //Testing
     testImplementation(libs.junit)
