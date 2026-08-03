@@ -6,13 +6,40 @@
 bin/
 obj/
 
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
 # Android Studio
 .idea/
 .gradle/
 build/
 local.properties
 *.apk
+*.aab
+
+captures/
+.externalNativeBuild/
+.cxx/
+
+#Información sensible
+.env
+.env.*
+!.env.example
+
+appsettings.Development.json
+appsettings.Local.json
+
+secrets.json
+*.jks
+*.keystore
+
+# Logs
+*.log
+logs/
 
 # Archivos del sistema
 Thumbs.db
 .DS_Store
+desktop.ini
