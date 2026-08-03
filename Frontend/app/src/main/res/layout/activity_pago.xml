@@ -87,7 +87,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     app:cursorColor="@color/mesajil_blue"
-                    app:maxLength="16"
                     app:readOnly="false" />
 
             </FrameLayout>

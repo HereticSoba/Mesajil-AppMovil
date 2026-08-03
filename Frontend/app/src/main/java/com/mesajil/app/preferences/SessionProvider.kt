@@ -11,4 +11,8 @@ object SessionProvider {
     fun obtenerToken(): String? {
         return sessionManager.obtenerToken()
     }
+
+    fun obtenerCorreo(): String {
+        return sessionManager.obtenerCorreo().orEmpty()
+    }
 }

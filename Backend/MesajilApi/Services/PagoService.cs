@@ -10,12 +10,14 @@ namespace MesajilApi.Services
 {
     public class PagoService : IPagoService
     {
+        private readonly ILogger<PagoService> _logger;
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
-        public PagoService(HttpClient httpClient, IConfiguration configuration)
+        public PagoService(HttpClient httpClient, IConfiguration configuration, ILogger<PagoService> logger)
         {
             _httpClient = httpClient;
             _configuration = configuration;
+            _logger = logger;
         }
         public async Task<PagoResponseDto> ProcesarPagoAsync(PagoRequestDto dto)
         {
@@ -28,7 +30,7 @@ namespace MesajilApi.Services
             {
                 throw new Exception("El monto debe ser mayor a cero.");
             }
-            if (string.IsNullOrWhiteSpace(dto.TokenTarjeta))
+            if (string.IsNullOrWhiteSpace(dto.Token))
             {
                 throw new Exception("El token de tarjeta es obligatorio.");
             }
@@ -42,7 +44,12 @@ namespace MesajilApi.Services
                 external_reference = $"MESAJIL-{Guid.NewGuid()}",
                 payer = new
                 {
-                    email = dto.Email
+                    email = dto.Email,
+                    identification = new
+                    {
+                        type = dto.TipoDocumento,
+                        number = dto.NumeroDocumento
+                    }
                 },
                 transactions = new
                 {
@@ -55,7 +62,7 @@ namespace MesajilApi.Services
                             {
                                 id = dto.MetodoPago,
                                 type = dto.TipoMetodoPago,
-                                token = dto.TokenTarjeta,
+                                token = dto.Token,
                                 installments = dto.Cuotas
                             }
                         }
@@ -69,6 +76,10 @@ namespace MesajilApi.Services
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
+            _logger.LogInformation("Respuesta Mercado Pago - Status: {StatusCode} - Body: {ResponseContent}",
+                (int)response.StatusCode,
+                responseContent
+                );
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(

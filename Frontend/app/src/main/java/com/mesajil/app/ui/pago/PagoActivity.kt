@@ -1,6 +1,7 @@
 package com.mesajil.app.ui.pago
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -18,12 +19,20 @@ import com.mercadopago.sdk.android.coremethods.domain.interactor.coreMethods
 import com.mercadopago.sdk.android.coremethods.domain.model.BuyerIdentification
 import com.mercadopago.sdk.android.coremethods.domain.utils.Result
 import kotlinx.coroutines.launch
+import com.mesajil.app.models.request.PagoRequest
+import com.mesajil.app.preferences.SessionProvider
+import com.mesajil.app.repository.PagoRepository
 
 class PagoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPagoBinding
     private var tarjetaValida = false
     private var vencimientoValido = false
     private var cvvValido = false
+    private var tokenTarjeta = ""
+    private var metodoPago = ""
+    private var tipoMetodoPago = ""
+    private var cuotas = 1
+    private val pagoRepository = PagoRepository()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPagoBinding.inflate(layoutInflater)
@@ -53,12 +62,40 @@ class PagoActivity : AppCompatActivity() {
             when (event) {
                 is CardNumberTextFieldEvent.IsValid -> {
                     tarjetaValida = event.isValid
+
+                    Log.d(
+                        "PagoValidacion",
+                        "Número tarjeta -> IsValid=${event.isValid}"
+                    )
+
                     actualizarEstadoBotonPago()
                 }
+                is CardNumberTextFieldEvent.OnBinChanged -> {
+                    event.cardBin?.let { bin ->
+                        lifecycleScope.launch {
+                            val coreMethods = MercadoPagoSDK.getInstance().coreMethods
+                            when (val result = coreMethods.getPaymentMethods(bin)) {
+                                is Result.Success -> {
+                                    val metodo = result.data.firstOrNull()
+                                    metodoPago = metodo?.id.orEmpty()
+                                    tipoMetodoPago = metodo?.paymentTypeId.orEmpty()
+                                    Log.d(
+                                        "MercadoPago",
+                                        "Método: ${metodo?.id} - Tipo: ${metodo?.paymentTypeId}"
+                                    )
+                                }
 
-                else -> Unit
+                                is Result.Error -> {
+                                    metodoPago = ""
+                                    tipoMetodoPago = ""
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
+
         binding.expirationDateField.onEvent = { event ->
             when (event) {
                 is ExpirationDateTextFieldEvent.IsValid -> {
@@ -82,6 +119,10 @@ class PagoActivity : AppCompatActivity() {
     }
 
     private fun actualizarEstadoBotonPago() {
+        Log.d(
+            "PagoValidacion",
+            "Tarjeta=$tarjetaValida | Vencimiento=$vencimientoValido | CVV=$cvvValido | Metodo=$metodoPago | Tipo=$tipoMetodoPago"
+        )
         binding.btnPagar.isEnabled = tarjetaValida && vencimientoValido && cvvValido
     }
 
@@ -118,12 +159,8 @@ class PagoActivity : AppCompatActivity() {
                 )
             ) {
                 is Result.Success -> {
-                    val token = result.data.token
-                    Toast.makeText(
-                        this@PagoActivity,
-                        "Token generado correctamente",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    tokenTarjeta = result.data.token
+                    procesarPago(tokenTarjeta)
                 }
 
                 is Result.Error -> {
@@ -135,6 +172,54 @@ class PagoActivity : AppCompatActivity() {
                     actualizarEstadoBotonPago()
                 }
             }
+        }
+    }
+
+    private suspend fun procesarPago(token: String) {
+        if (metodoPago.isBlank() || tipoMetodoPago.isBlank()) {
+            Toast.makeText(
+                this@PagoActivity,
+                "No se pude identificar el método de pago",
+                Toast.LENGTH_LONG
+            ).show()
+            actualizarEstadoBotonPago()
+            return
+        }
+        val request = PagoRequest(
+            monto = intent.getDoubleExtra("TOTAL", 0.0),
+            email = "comprador@testuser.com",
+            token = token,
+            metodoPago = metodoPago,
+            tipoMetodoPago = tipoMetodoPago,
+            cuotas = 1,
+            tipoDocumento = "DNI",
+            numeroDocumento = "12345678"
+        )
+        try {
+            val response = pagoRepository.procesarPago(request)
+            if (response.isSuccessful) {
+                val pago = response.body()
+                Toast.makeText(
+                    this@PagoActivity,
+                    "Pago procesado: ${pago?.estado}",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                val error = response.errorBody()?.string()
+                Toast.makeText(
+                    this@PagoActivity,
+                    "Error al procesar pago: $error",
+                    Toast.LENGTH_LONG
+                ).show()
+                actualizarEstadoBotonPago()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(
+                this@PagoActivity,
+                "Error de conexión: ${e.message}",
+                Toast.LENGTH_LONG
+            ).show()
+            actualizarEstadoBotonPago()
         }
     }
 }
