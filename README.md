@@ -24,6 +24,7 @@ La solución está compuesta por una API REST desarrollada en ASP.NET Core y una
 - Gson Converter
 - SharedPreferences (SessionManager)
 - Fragments + Bottom Navigation
+- RecyclerView
 
 ### Base de datos
 - MySQL
