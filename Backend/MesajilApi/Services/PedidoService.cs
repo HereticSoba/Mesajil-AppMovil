@@ -69,7 +69,7 @@ namespace MesajilApi.Services
         {
             return await _repository.EliminarAsync(id);
         }
-        public async Task<PedidoFinalizadoResponseDto> FinalizarCompraAsync(int idUsuario, FinalizarCompraDto dto)
+        public async Task<PedidoFinalizadoResponseDto> FinalizarCompraAsync(int idUsuario, FinalizarCompraDto dto, string estadoPago = "Pendiente", string? idOrdenMercadoPago = null)
         {
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -135,8 +135,8 @@ namespace MesajilApi.Services
                     DireccionEntrega = direccionEntrega,
                     TiendaRecojo = tiendaRecojo,
                     CostoEnvio = costoEnvio,
-                    //De prueba hasta integrar pasarela
-                    EstadoPago = "Pendiente"
+                    EstadoPago = estadoPago,
+                    IdOrdenMercadoPago = idOrdenMercadoPago
                 };
                 _context.Pedidos.Add(pedido);
                 await _context.SaveChangesAsync();

@@ -5,5 +5,6 @@ data class PagoResponse (
     val estado: String,
     val detalleEstado: String?,
     val monto: Double,
+    val idPedido: Int?,
     val mensaje: String
 )

@@ -24,6 +24,8 @@ namespace MesajilApi.Models
         public decimal CostoEnvio { get; set; }
         [StringLength(30)]
         public string EstadoPago { get; set; } = string.Empty;
+        [StringLength(100)]
+        public string? IdOrdenMercadoPago { get; set; }
         [ForeignKey(nameof(IdUsuario))]
         public Usuario? Usuario { get; set; }
     }

@@ -6,6 +6,7 @@
         public string Estado { get; set; } = string.Empty;
         public string? DetalleEstado { get; set; }
         public decimal Monto { get; set; }
+        public int? IdPedido { get; set; }
         public string Mensaje { get; set; } = string.Empty;
     }
 }

@@ -9,7 +9,7 @@ namespace MesajilApi.Services
         Task<PedidoResponseDto> CrearAsync(PedidoCreateDto dto);
         Task<PedidoResponseDto?> ActualizarAsync(int id, PedidoUpdateDto dto);
         Task<bool> EliminarAsync(int id);
-        Task<PedidoFinalizadoResponseDto> FinalizarCompraAsync(int idUsuario, FinalizarCompraDto dto);
+        Task<PedidoFinalizadoResponseDto> FinalizarCompraAsync(int idUsuario, FinalizarCompraDto dto, string estadoPago = "Pendiente", string? idOrdenMercadoPago = null);
         Task<List<PedidoResponseDto>> ObtenerMisPedidosAsync(int idUsuario);
     }
 }

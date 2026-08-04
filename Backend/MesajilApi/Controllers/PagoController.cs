@@ -3,6 +3,7 @@ using MesajilApi.DTOs.Pago;
 using MesajilApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace MesajilApi.Controllers
 {
@@ -20,8 +21,9 @@ namespace MesajilApi.Controllers
         public async Task<IActionResult> ProcesarPago(PagoRequestDto dto)
         {
             try
-            {
-                var resultado = await _pagoService.ProcesarPagoAsync(dto);
+            { 
+                var idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                var resultado = await _pagoService.ProcesarPagoAsync(idUsuario, dto);
                 return Ok(resultado);
             }
             catch (Exception ex)

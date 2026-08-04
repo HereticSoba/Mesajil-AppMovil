@@ -4,6 +4,6 @@ namespace MesajilApi.Services
 {
     public interface IPagoService
     {
-        Task<PagoResponseDto> ProcesarPagoAsync(PagoRequestDto dto);
+        Task<PagoResponseDto> ProcesarPagoAsync(int idUsuario, PagoRequestDto dto);
     }
 }

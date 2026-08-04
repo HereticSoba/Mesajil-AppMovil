@@ -1,10 +1,10 @@
 ﻿using MesajilApi.DTOs.Pago;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using MesajilApi.Repositories;
 using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using MesajilApi.DTOs.Pedido;
 
 namespace MesajilApi.Services
 {
@@ -13,29 +13,87 @@ namespace MesajilApi.Services
         private readonly ILogger<PagoService> _logger;
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
-        public PagoService(HttpClient httpClient, IConfiguration configuration, ILogger<PagoService> logger)
+        private readonly ICarritoRepository _carritoRepository;
+        private readonly IDetalleCarritoRepository _detalleCarritoRepository;
+        private readonly IInventarioRepository _inventarioRepository;
+        private readonly IPedidoService _pedidoService;
+        public PagoService(HttpClient httpClient, IConfiguration configuration, ILogger<PagoService> logger, ICarritoRepository carritoRepository, IDetalleCarritoRepository detalleCarritoRepository, IInventarioRepository inventarioRepository, IPedidoService pedidoService)
         {
             _httpClient = httpClient;
             _configuration = configuration;
             _logger = logger;
+            _carritoRepository = carritoRepository;
+            _detalleCarritoRepository = detalleCarritoRepository;
+            _inventarioRepository = inventarioRepository;
+            _pedidoService = pedidoService;
         }
-        public async Task<PagoResponseDto> ProcesarPagoAsync(PagoRequestDto dto)
+        public async Task<PagoResponseDto> ProcesarPagoAsync(int idUsuario, PagoRequestDto dto)
         {
             var accessToken = _configuration["MercadoPago:AccessToken"];
             if (string.IsNullOrWhiteSpace(accessToken))
             {
                 throw new Exception("No se encontró la configuración de Mercado Pago.");
             }
-            if (dto.Monto <= 0)
-            {
-                throw new Exception("El monto debe ser mayor a cero.");
-            }
             if (string.IsNullOrWhiteSpace(dto.Token))
             {
                 throw new Exception("El token de tarjeta es obligatorio.");
             }
+            var tipoEntrega = dto.TipoEntrega.Trim();
+            if (!tipoEntrega.Equals(
+                "Delivery",
+                StringComparison.OrdinalIgnoreCase) &&
+                !tipoEntrega.Equals(
+                    "Recojo",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                throw new Exception(
+                    "El tipo de entrega debe ser Delivery o Recojo.");
+            }
+            tipoEntrega = tipoEntrega.Equals(
+                "Delivery",
+                StringComparison.OrdinalIgnoreCase)
+                ? "Delivery"
+                : "Recojo";
+            decimal costoEnvio;
+            if (tipoEntrega == "Delivery")
+            {
+                if (string.IsNullOrWhiteSpace(dto.DireccionEntrega))
+                {
+                    throw new Exception(
+                        "Debe ingresar una dirección para el delivery.");
+                }
+                costoEnvio = 10.00m;
+            }
+            else
+            {
+                costoEnvio = 0.00m;
+            }
+            var carrito = await _carritoRepository.ObtenerPorUsuarioAsync(idUsuario);
+            if (carrito == null)
+            {
+                throw new Exception("No se encontró un carrito activo.");
+            }
+            var detalles = await _detalleCarritoRepository.ObtenerPorCarritoAsync(carrito.IdCarrito);
+            if (!detalles.Any())
+            {
+                throw new Exception("El carrito está vacío.");
+            }
+            foreach (var item in detalles)
+            {
+                var inventario = await _inventarioRepository.ObtenerPorProductoAsync(item.IdProducto);
+                if (inventario == null)
+                {
+                    throw new Exception($"No existe inventario para el producto {item.IdProducto}");
+                }
+                if (inventario.StockActual < item.Cantidad)
+                {
+                    throw new Exception($"Stock insuficiente para el producto {item.IdProducto}");
+                }
+            }
+            decimal subtotal = detalles.Sum(d => d.Subtotal);
+            decimal montoReal = subtotal + costoEnvio;
             var idempotencyKey = Guid.NewGuid().ToString();
-            var monto = dto.Monto.ToString("0.00", CultureInfo.InvariantCulture);
+            var monto = montoReal.ToString("0.00", CultureInfo.InvariantCulture);
             var body = new
             {
                 type = "online",
@@ -98,12 +156,35 @@ namespace MesajilApi.Services
             var detalleEstado = root.TryGetProperty("status_detail", out var statusDetail)
                 ? statusDetail.GetString()
                 : null;
+            if(!estado.Equals("processed", StringComparison.OrdinalIgnoreCase))
+            {
+                return new PagoResponseDto
+                {
+                    IdOrden = idOrden,
+                    Estado = estado,
+                    DetalleEstado = detalleEstado,
+                    Monto = montoReal,
+                    IdPedido = null,
+                    Mensaje = "El pago no fue procesado. Pedido no generado."
+                };
+            }
+            var pedidoFinalizado = await _pedidoService.FinalizarCompraAsync(
+                idUsuario,
+                new FinalizarCompraDto
+                {
+                    TipoEntrega = dto.TipoEntrega,
+                    DireccionEntrega = dto.DireccionEntrega
+                },
+                "Pagado",
+                idOrden
+                );
             return new PagoResponseDto
             {
                 IdOrden = idOrden,
                 Estado = estado,
                 DetalleEstado = detalleEstado,
-                Monto = dto.Monto,
+                Monto = montoReal,
+                IdPedido = pedidoFinalizado.IdPedido,
                 Mensaje = "Solicitud procesada por Mercado Pago."
             };
         }

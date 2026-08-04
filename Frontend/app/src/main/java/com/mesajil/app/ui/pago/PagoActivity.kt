@@ -186,14 +186,15 @@ class PagoActivity : AppCompatActivity() {
             return
         }
         val request = PagoRequest(
-            monto = intent.getDoubleExtra("TOTAL", 0.0),
             email = "comprador@testuser.com",
             token = token,
             metodoPago = metodoPago,
             tipoMetodoPago = tipoMetodoPago,
             cuotas = 1,
             tipoDocumento = "DNI",
-            numeroDocumento = "12345678"
+            numeroDocumento = "12345678",
+            tipoEntrega = intent.getStringExtra("TIPO_ENTREGA").orEmpty(),
+            direccionEntrega = intent.getStringExtra("DIRECCION_ENTREGA")
         )
         try {
             val response = pagoRepository.procesarPago(request)
