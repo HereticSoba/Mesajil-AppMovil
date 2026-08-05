@@ -20,8 +20,9 @@ import com.mercadopago.sdk.android.coremethods.domain.model.BuyerIdentification
 import com.mercadopago.sdk.android.coremethods.domain.utils.Result
 import kotlinx.coroutines.launch
 import com.mesajil.app.models.request.PagoRequest
-import com.mesajil.app.preferences.SessionProvider
 import com.mesajil.app.repository.PagoRepository
+import android.content.Intent
+import com.mesajil.app.ui.compra.CompraExitosaActivity
 
 class PagoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPagoBinding
@@ -70,6 +71,7 @@ class PagoActivity : AppCompatActivity() {
 
                     actualizarEstadoBotonPago()
                 }
+
                 is CardNumberTextFieldEvent.OnBinChanged -> {
                     event.cardBin?.let { bin ->
                         lifecycleScope.launch {
@@ -179,7 +181,7 @@ class PagoActivity : AppCompatActivity() {
         if (metodoPago.isBlank() || tipoMetodoPago.isBlank()) {
             Toast.makeText(
                 this@PagoActivity,
-                "No se pude identificar el método de pago",
+                "No se pudo identificar el método de pago",
                 Toast.LENGTH_LONG
             ).show()
             actualizarEstadoBotonPago()
@@ -200,11 +202,23 @@ class PagoActivity : AppCompatActivity() {
             val response = pagoRepository.procesarPago(request)
             if (response.isSuccessful) {
                 val pago = response.body()
-                Toast.makeText(
-                    this@PagoActivity,
-                    "Pago procesado: ${pago?.estado}",
-                    Toast.LENGTH_LONG
-                ).show()
+                if (pago != null && pago.estado.equals(
+                        "processed",
+                        ignoreCase = true
+                    ) && pago.idPedido != null
+                ) {
+                    abrirCompraExitosa(
+                        pago.idPedido,
+                        pago.monto
+                    )
+                } else {
+                    Toast.makeText(
+                        this@PagoActivity,
+                        pago?.mensaje ?: "El pago no pudo completarse.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    actualizarEstadoBotonPago()
+                }
             } else {
                 val error = response.errorBody()?.string()
                 Toast.makeText(
@@ -222,5 +236,24 @@ class PagoActivity : AppCompatActivity() {
             ).show()
             actualizarEstadoBotonPago()
         }
+    }
+
+    private fun abrirCompraExitosa(
+        idPedido: Int,
+        monto: Double
+    ) {
+        val tipoEntrega = intent.getStringExtra("TIPO_ENTREGA").orEmpty()
+        val direccionEntrega = intent.getStringExtra("DIRECCION_ENTREGA")
+        val intentExito = Intent(
+            this,
+            CompraExitosaActivity::class.java
+        ).apply {
+            putExtra("ID_PEDIDO", idPedido)
+            putExtra("MONTO", monto)
+            putExtra("TIPO_ENTREGA", tipoEntrega)
+            putExtra("DIRECCION_ENTREGA", direccionEntrega)
+        }
+        startActivity(intentExito)
+        finish()
     }
 }

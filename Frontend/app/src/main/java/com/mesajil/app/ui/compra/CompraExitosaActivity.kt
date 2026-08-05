@@ -1,12 +1,13 @@
 package com.mesajil.app.ui.compra
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.mesajil.app.R
 import com.mesajil.app.databinding.ActivityCompraExitosaBinding
+import android.content.Intent
+import com.mesajil.app.MainActivity
+import com.mesajil.app.ui.pedidos.HistorialPedidosActivity
 
 class CompraExitosaActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCompraExitosaBinding
@@ -56,10 +57,32 @@ class CompraExitosaActivity : AppCompatActivity() {
 
     private fun configurarBotones() {
         binding.btnVerPedidos.setOnClickListener {
-//        Pendiente conectar con pedidos
+            val intentInicio = Intent(
+                this,
+                MainActivity::class.java
+            ).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intentInicio)
+
+            val intentPedidos = Intent(
+                this,
+                HistorialPedidosActivity::class.java
+            )
+            startActivity(intentPedidos)
+            finish()
         }
+
         binding.btnVolverInicio.setOnClickListener {
-//            Pendiente conectar con el home
+            val intentInicio = Intent(
+                this,
+                MainActivity::class.java
+            ).apply {
+                flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intentInicio)
+            finish()
         }
     }
 }
