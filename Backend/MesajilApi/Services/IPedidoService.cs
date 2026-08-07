@@ -11,5 +11,7 @@ namespace MesajilApi.Services
         Task<bool> EliminarAsync(int id);
         Task<PedidoFinalizadoResponseDto> FinalizarCompraAsync(int idUsuario, FinalizarCompraDto dto, string estadoPago = "Pendiente", string? idOrdenMercadoPago = null);
         Task<List<PedidoResponseDto>> ObtenerMisPedidosAsync(int idUsuario);
+        Task CancelarPedidoAsync(int idUsuario, int idPedido);
+        Task<PedidoDetalleResponseDto?> ObtenerDetallePedidoAsync(int idUsuario, int idPedido);
     }
 }

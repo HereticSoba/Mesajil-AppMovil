@@ -81,6 +81,32 @@ namespace MesajilApi.Controllers
                 return NotFound();
             return NoContent();
         }
-
+        [HttpPut("{id}/cancelar")]
+        public async Task<IActionResult> CancelarPedido(int id)
+        {
+            try
+            {
+                var idUsuario = int.Parse(
+                    User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                await _service.CancelarPedidoAsync(idUsuario, id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponseDto
+                {
+                    Mensaje = ex.Message
+                });
+            }
+        }
+        [HttpGet("{id}/detalle")]
+        public async Task<IActionResult>ObtenerDetalle(int id)
+        {
+            var idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var detalle = await _service.ObtenerDetallePedidoAsync(idUsuario, id);
+            if(detalle == null)
+                return NotFound();
+            return Ok(detalle);
+        }
     }
 }

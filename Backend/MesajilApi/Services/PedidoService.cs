@@ -184,5 +184,80 @@ namespace MesajilApi.Services
             var pedidos = await _repository.ObtenerPorUsuarioAsync(idUsuario);
             return PedidoMapper.ToResponseDtoList(pedidos);
         }
+        public async Task CancelarPedidoAsync(int idUsuario, int idPedido)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var pedido = await _context.Pedidos
+                    .FirstOrDefaultAsync(p => p.IdPedido == idPedido && p.IdUsuario == idUsuario);
+                if(pedido == null)
+                {
+                    throw new Exception("No se encontró el pedido.");
+                }
+                if(!pedido.EstadoPedido.Equals(
+                    "Pendiente",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new Exception("Solo se pueden cancelar pedidos pendientes.");
+                }
+                var detalles = await _context.DetallePedidos
+                    .Where(d => d.IdPedido == idPedido)
+                    .ToListAsync();
+                foreach(var detalle in detalles)
+                {
+                    var inventario = await _inventarioRepository
+                        .ObtenerPorProductoAsync(detalle.IdProducto);
+                    if (inventario != null)
+                    {
+                        inventario.StockActual += detalle.Cantidad;
+                        inventario.UltimaActualizacion = DateTime.Now;
+                        await _inventarioRepository.ActualizarAsync(inventario);
+                    }
+                }
+                pedido.EstadoPedido = "Cancelado";
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+        public async Task<PedidoDetalleResponseDto?> ObtenerDetallePedidoAsync(
+            int idUsuario, int idPedido)
+        {
+            var pedido = await _context.Pedidos
+                .FirstOrDefaultAsync(p => p.IdPedido == idPedido && p.IdUsuario == idUsuario);
+            if(pedido == null)
+                return null;
+
+            var detalles = await _context.DetallePedidos
+                .Include(d => d.Producto)
+                .Where(d => d.IdPedido == idPedido)
+                .ToListAsync();
+            return new PedidoDetalleResponseDto
+            {
+                IdPedido = pedido.IdPedido,
+                FechaPedido = pedido.FechaPedido,
+                Total = pedido.Total,
+                EstadoPedido = pedido.EstadoPedido,
+                EstadoPago = pedido.EstadoPago,
+                TipoEntrega = pedido.TipoEntrega,
+                DireccionEntrega = pedido.DireccionEntrega,
+                TiendaRecojo = pedido.TiendaRecojo,
+                CostoEnvio = pedido.CostoEnvio,
+                IdOrdenMercadoPago = pedido.IdOrdenMercadoPago,
+
+                Productos = detalles.Select(d => new DetallePedidoResponseDto
+                {
+                    Producto = d.Producto!.Nombre,
+                    Cantidad = d.Cantidad,
+                    PrecioUnitario = d.PrecioUnitario,
+                    Subtotal = d.Subtotal
+                }).ToList()
+            };
+        }
     }
 }

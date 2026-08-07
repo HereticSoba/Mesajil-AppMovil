@@ -1,5 +1,6 @@
 package com.mesajil.app.ui.pedidos
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +30,14 @@ class HistorialPedidosActivity : AppCompatActivity() {
             insets
         }
 
-        adapter = PedidoAdapter(mutableListOf())
+        adapter = PedidoAdapter(mutableListOf()){pedido ->
+            val intent = Intent(
+                this,
+                DetallePedidoActivity::class.java
+            )
+            intent.putExtra("ID_PEDIDO", pedido.idPedido)
+            startActivity(intent)
+        }
         binding.rvPedidos.layoutManager = LinearLayoutManager(this)
         binding.rvPedidos.adapter = adapter
         binding.toolbar.setNavigationOnClickListener {

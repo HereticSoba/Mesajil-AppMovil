@@ -2,12 +2,14 @@ package com.mesajil.app.ui.pedidos
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.MotionScene.Transition.TransitionOnClick
 import androidx.recyclerview.widget.RecyclerView
 import com.mesajil.app.databinding.ItemPedidoBinding
 import com.mesajil.app.models.response.PedidoResponse
 
 class PedidoAdapter(
-    private val lista: MutableList<PedidoResponse>
+    private val lista: MutableList<PedidoResponse>,
+    private val onClick: (PedidoResponse) -> Unit
 ) : RecyclerView.Adapter<PedidoAdapter.ViewHolder>() {
     inner class ViewHolder(
         val binding: ItemPedidoBinding
@@ -28,6 +30,7 @@ class PedidoAdapter(
         holder.binding.txtFecha.text = pedido.fechaPedido
         holder.binding.txtEstado.text = pedido.estadoPedido
         holder.binding.txtTotal.text = "S/. %.2f".format(pedido.total)
+        holder.itemView.setOnClickListener{onClick(pedido)}
     }
 
     override fun getItemCount(): Int = lista.size

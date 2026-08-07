@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.mesajil.app.models.request.FinalizarCompraRequest
 import com.mesajil.app.models.response.ErrorResponse
+import com.mesajil.app.models.response.PedidoDetalleResponse
 import com.mesajil.app.models.response.PedidoFinalizadoResponse
 import com.mesajil.app.models.response.PedidoResponse
 import com.mesajil.app.repository.PedidoRepository
@@ -16,7 +17,9 @@ class PedidoViewModel : ViewModel() {
     private val repository = PedidoRepository()
     private val _resultado = MutableLiveData<Result<PedidoFinalizadoResponse>>()
     private val _pedidos = MutableLiveData<List<PedidoResponse>>()
+    private val _detallePedido = MutableLiveData<PedidoDetalleResponse>()
 
+    val detallePedido: LiveData<PedidoDetalleResponse> = _detallePedido
     val resultado: LiveData<Result<PedidoFinalizadoResponse>> = _resultado
     val pedidos: LiveData<List<PedidoResponse>> = _pedidos
 
@@ -55,6 +58,20 @@ class PedidoViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 _pedidos.value = emptyList()
+            }
+        }
+    }
+
+    fun obtenerDetallePedido(idPedido: Int) {
+        viewModelScope.launch {
+            try {
+                val response = repository.obtenerDetallePedido(idPedido)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        _detallePedido.value = it
+                    }
+                }
+            } catch (_: Exception) {
             }
         }
     }
