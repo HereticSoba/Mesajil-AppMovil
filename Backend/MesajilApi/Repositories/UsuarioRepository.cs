@@ -48,5 +48,9 @@ namespace MesajilApi.Repositories
                 .Include(u => u.Rol)
                 .FirstOrDefaultAsync(u => u.Correo == correo);
         }
+        public async Task ActualizarPerfilAsync(Usuario usuario)
+        {
+            await  _context.SaveChangesAsync();
+        }
     }
 }

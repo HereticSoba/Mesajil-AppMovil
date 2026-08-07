@@ -23,7 +23,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +34,7 @@
             android:padding="16dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="16dp">
+            android:paddingBottom="32dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -43,7 +45,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="center_horizontal"
                     android:orientation="vertical"
                     android:padding="24dp">
 
@@ -56,24 +58,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mi información"
-                        android:textColor="@color/mesajil_blue"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/txtNombre"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
+                        android:text="Mi perfil"
+                        android:textColor="@color/mesajil_blue"
                         android:textSize="22sp"
                         android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/txtCorreo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -81,80 +70,116 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
-                <LinearLayout
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutNombres"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    android:hint="Nombres">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rol"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/txtRol"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <View
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtNombres"
                         android:layout_width="match_parent"
-                        android:layout_height="12dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ID Usuario"
-                        android:textStyle="bold" />
+                        android:enabled="false" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/txtIdUsuario"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutApellidos"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="Apellidos">
 
-                    <View
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtApellidos"
                         android:layout_width="match_parent"
-                        android:layout_height="12dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ID Carrito"
-                        android:textStyle="bold" />
+                        android:enabled="false" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/txtIdCarrito"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutCorreo"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="Correo electrónico">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtCorreo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="textEmailAddress" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutTelefono"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="Teléfono">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtTelefono"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="phone" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutDireccion"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="Dirección">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtDireccion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="textPostalAddress" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEditar"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                app:strokeColor="@color/mesajil_blue"
                 android:text="Editar información"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+                app:strokeColor="@color/mesajil_blue" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDesactivarCuenta"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                app:icon="@drawable/ic_delete"
                 android:text="Desactivar cuenta"
                 android:textColor="@color/error"
-                app:strokeColor="@color/error"
-                app:strokeWidth="1dp"
+                app:icon="@drawable/ic_delete"
                 app:iconTint="@color/error"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
-
-
+                app:strokeColor="@color/error"
+                app:strokeWidth="1dp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

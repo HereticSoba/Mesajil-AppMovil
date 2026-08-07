@@ -28,6 +28,17 @@ class SessionManager(context: Context) {
         }
     }
 
+    fun actualizarDatosPerfil(
+        nombres: String,
+        correo: String
+    ){
+        preferences.edit().apply{
+            putString(KEY_NOMBRES , nombres)
+            putString(KEY_CORREO , correo)
+            apply()
+        }
+    }
+
     fun guardarIdCarrito(idCarrito: Int) {
         preferences.edit().apply {
             putInt(KEY_ID_CARRITO, idCarrito)

@@ -34,9 +34,39 @@ namespace MesajilApi.Services
             var entidad = UsuarioMapper.toEntity(dto);
             await _usuarioRepository.ActualizarAsync(entidad);
         }
+        public async Task ActualizarPerfilAsync(
+            int idUsuario, ActualizarPerfilDto dto)
+        {
+            var usuario = await _usuarioRepository.ObtenerPorIdAsync(idUsuario);
+            if(usuario == null)
+            {
+                throw new Exception("Usuario no encontrado.");
+            }
+            var correoExistente = await _usuarioRepository.ObtenerPorCorreoAsync(dto.Correo);
+            if(correoExistente != null && correoExistente.IdUsuario != idUsuario)
+            {
+                throw new Exception("El correo ya está registrado por otro usuario.");
+            }
+            usuario.Nombres = dto.Nombres.Trim();
+            usuario.Apellidos = dto.Apellidos.Trim();
+            usuario.Correo = dto.Correo.Trim();
+            usuario.Telefono = dto.Telefono?.Trim();
+            usuario.Direccion = dto.Direccion?.Trim();
+
+            await _usuarioRepository.ActualizarPerfilAsync(usuario);
+        }
         public async Task EliminarAsync(int id)
         {
             await _usuarioRepository.EliminarAsync(id);
+        }
+        public async Task<UsuarioResponseDto?> ObtenerMiPerfilAsync(int idUsuario)
+        {
+            var usuario = await _usuarioRepository.ObtenerPorIdAsync(idUsuario);
+            if (usuario == null)
+            {
+                return null;
+            }
+            return UsuarioMapper.toResponseDto(usuario);
         }
     }
 }

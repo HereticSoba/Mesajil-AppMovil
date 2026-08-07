@@ -58,4 +58,12 @@ class PerfilFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (_binding != null) {
+            binding.txtNombre.text = sessionManager.obtenerNombre()
+            binding.txtCorreo.text = sessionManager.obtenerCorreo()
+        }
+    }
 }

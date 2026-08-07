@@ -9,5 +9,7 @@ namespace MesajilApi.Services
         Task<UsuarioResponseDto> CrearAsync(UsuarioCreateDto dto);
         Task ActualizarAsync(UsuarioUpdateDto dto);
         Task EliminarAsync(int id);
+        Task ActualizarPerfilAsync(int idUsuario, ActualizarPerfilDto dto);
+        Task<UsuarioResponseDto?> ObtenerMiPerfilAsync(int idUsuario);
     }
 }
