@@ -16,4 +16,7 @@ class PedidoRepository {
     suspend fun obtenerDetallePedido(idPedido: Int): Response<PedidoDetalleResponse> {
         return pedidoService.obtenerDetallePedido(idPedido)
     }
+    suspend fun cancelarPedido(idPedido: Int): Response<Unit> {
+        return pedidoService.cancelarPedido(idPedido)
+    }
 }

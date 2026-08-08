@@ -8,6 +8,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface PedidoService {
@@ -23,4 +24,9 @@ interface PedidoService {
     suspend fun obtenerDetallePedido(
         @Path("id") idPedido: Int
     ): Response<PedidoDetalleResponse>
+
+    @PUT("api/Pedido/{id}/cancelar")
+    suspend fun cancelarPedido(
+        @Path("id") idPedido: Int
+    ): Response<Unit>
 }

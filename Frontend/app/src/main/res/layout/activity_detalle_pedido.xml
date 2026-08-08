@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F7FA"
+    android:orientation="vertical"
     tools:context=".ui.pedidos.DetallePedidoActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -21,7 +22,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,22 +42,26 @@
             <TextView
                 android:id="@+id/txtEstado"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp" />
 
             <TextView
                 android:id="@+id/txtFecha"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp" />
 
             <TextView
                 android:id="@+id/txtEntrega"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp" />
 
             <TextView
                 android:id="@+id/txtLugar"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -78,12 +85,14 @@
             <TextView
                 android:id="@+id/txtEnvio"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp" />
 
             <TextView
                 android:id="@+id/txtTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -101,5 +110,7 @@
                 android:text="Cancelar pedido" />
 
         </LinearLayout>
+
     </ScrollView>
+
 </LinearLayout>

@@ -17,9 +17,7 @@ class PedidoViewModel : ViewModel() {
     private val repository = PedidoRepository()
     private val _resultado = MutableLiveData<Result<PedidoFinalizadoResponse>>()
     private val _pedidos = MutableLiveData<List<PedidoResponse>>()
-    private val _detallePedido = MutableLiveData<PedidoDetalleResponse>()
 
-    val detallePedido: LiveData<PedidoDetalleResponse> = _detallePedido
     val resultado: LiveData<Result<PedidoFinalizadoResponse>> = _resultado
     val pedidos: LiveData<List<PedidoResponse>> = _pedidos
 
@@ -62,16 +60,55 @@ class PedidoViewModel : ViewModel() {
         }
     }
 
-    fun obtenerDetallePedido(idPedido: Int) {
+    fun obtenerDetallePedido(
+        idPedido: Int,
+        onSuccess: (PedidoDetalleResponse) -> Unit,
+        onError: (String) -> Unit
+    ) {
         viewModelScope.launch {
             try {
                 val response = repository.obtenerDetallePedido(idPedido)
+
                 if (response.isSuccessful) {
-                    response.body()?.let {
-                        _detallePedido.value = it
+                    val pedido = response.body()
+
+                    if (pedido != null) {
+                        onSuccess(pedido)
+                    } else {
+                        onError("No se encontró el detalle del pedido.")
                     }
+                } else {
+                    val error = response.errorBody()?.string()
+
+                    onError(
+                        "Error ${response.code()}: ${error ?: "No se pudo obtener el detalle del pedido."}"
+                    )
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                onError(
+                    e.message ?: "Error de conexión."
+                )
+            }
+        }
+    }
+
+    fun cancelarPedido(
+        idPedido: Int,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = repository.cancelarPedido(idPedido)
+                if (response.isSuccessful) {
+                    onSuccess()
+                } else {
+                    onError("No se pudo cancelar el pedido.")
+                }
+            } catch (e: Exception) {
+                onError(
+                    e.message ?: "Error de conexión."
+                )
             }
         }
     }
