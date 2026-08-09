@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MesajilApi.Models
 {
-    [Table("Inventario")]
+    [Table("inventario")]
     public class Inventario
     {
         [Key]

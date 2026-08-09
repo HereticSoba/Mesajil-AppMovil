@@ -29,7 +29,7 @@ captures/
 !.env.example
 
 appsettings.Development.json
-appsettings.Local.json
+appsettings.Local*.json
 
 secrets.json
 *.jks
@@ -43,3 +43,9 @@ logs/
 Thumbs.db
 .DS_Store
 desktop.ini
+
+# Certificados
+*.pem
+*.pfx
+*.cer
+*.crt
