@@ -1,106 +1,136 @@
 ﻿using MesajilApi.DTOs.ImagenProducto;
 using MesajilApi.Mappings;
 using MesajilApi.Repositories;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace MesajilApi.Services
 {
     public class ImagenProductoService : IImagenProductoService
     {
         private readonly IImagenProductoRepository _imagenRepository;
-        private readonly IWebHostEnvironment _environment;
+        private readonly Cloudinary _cloudinary;
+
         public ImagenProductoService(
             IImagenProductoRepository imagenRepository,
-            IWebHostEnvironment environment)
+            IConfiguration configuration)
         {
             _imagenRepository = imagenRepository;
-            _environment = environment;
+
+            var cloudName = configuration["CLOUDINARY_CLOUD_NAME"];
+            var apiKey = configuration["CLOUDINARY_API_KEY"];
+            var apiSecret = configuration["CLOUDINARY_API_SECRET"];
+
+            var account = new Account(
+                cloudName,
+                apiKey,
+                apiSecret
+            );
+
+            _cloudinary = new Cloudinary(account);
+            _cloudinary.Api.Secure = true;
         }
+
         public async Task<IEnumerable<ImagenProductoResponseDto>> ObtenerTodosAsync()
         {
             var imagenes = await _imagenRepository.ObtenerTodosAsync();
             return ImagenProductoMapper.ToResponseDtoList(imagenes);
         }
+
         public async Task<ImagenProductoResponseDto?> ObtenerPorIdAsync(int id)
         {
             var imagen = await _imagenRepository.ObtenerPorIdAsync(id);
+
             if (imagen == null)
                 return null;
+
             return ImagenProductoMapper.ToResponseDto(imagen);
         }
-        public async Task<ImagenProductoResponseDto> CrearAsync(ImagenProductoCreateDto dto)
+
+        public async Task<ImagenProductoResponseDto> CrearAsync(
+            ImagenProductoCreateDto dto)
         {
-            var carpetaImagenes = Path.Combine(
-                _environment.WebRootPath,
-                "images",
-                "productos");
-            if (!Directory.Exists(carpetaImagenes))
+            var uploadParams = new ImageUploadParams
             {
-                Directory.CreateDirectory(carpetaImagenes);
-            }
-            var extension = Path.GetExtension(dto.Imagen.FileName);
-            var nombreArchivo = $"{Guid.NewGuid()}{extension}";
-            var rutaCompleta = Path.Combine(
-                carpetaImagenes,
-                nombreArchivo);
-            using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                File = new FileDescription(
+                    dto.Imagen.FileName,
+                    dto.Imagen.OpenReadStream()
+                ),
+                Folder = "mesajil/productos"
+            };
+
+            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+
+            if (uploadResult.Error != null)
             {
-                await dto.Imagen.CopyToAsync(stream);
+                throw new Exception(
+                    $"Error al subir imagen a Cloudinary: {uploadResult.Error.Message}"
+                );
             }
+
             var imagen = ImagenProductoMapper.ToEntity(dto);
-            imagen.UrlImagen = $"/images/productos/{nombreArchivo}";
+
+            imagen.UrlImagen = uploadResult.SecureUrl.ToString();
+
             var nuevaImagen = await _imagenRepository.CrearAsync(imagen);
+
             return ImagenProductoMapper.ToResponseDto(nuevaImagen);
         }
-        public async Task ActualizarAsync(ImagenProductoUpdateDto dto)
+
+        public async Task ActualizarAsync(
+            ImagenProductoUpdateDto dto)
         {
-            var imagenExistente = await _imagenRepository.ObtenerPorIdAsync(dto.IdImagen);
+            var imagenExistente =
+                await _imagenRepository.ObtenerPorIdAsync(dto.IdImagen);
+
             if (imagenExistente == null)
                 throw new Exception("La imagen no existe.");
+
             imagenExistente.IdProducto = dto.IdProducto;
             imagenExistente.Principal = dto.Principal;
+
             if (dto.Imagen != null)
             {
-                var rutaAnterior = Path.Combine(
-                    _environment.WebRootPath,
-                    imagenExistente.UrlImagen
-                    .TrimStart('/')
-                    .Replace('/', Path.DirectorySeparatorChar));
-                if (File.Exists(rutaAnterior))
+                var uploadParams = new ImageUploadParams
                 {
-                    File.Delete(rutaAnterior);
-                }
-                var extension = Path.GetExtension(dto.Imagen.FileName);
-                var nombreArchivo = $"{Guid.NewGuid()}{extension}";
-                var carpetaImagenes = Path.Combine(
-                    _environment.WebRootPath,
-                    "images",
-                    "productos");
-                var rutaCompleta = Path.Combine(
-                    carpetaImagenes,
-                    nombreArchivo);
-                using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                    File = new FileDescription(
+                        dto.Imagen.FileName,
+                        dto.Imagen.OpenReadStream()
+                    ),
+                    Folder = "mesajil/productos"
+                };
+
+                var uploadResult =
+                    await _cloudinary.UploadAsync(uploadParams);
+
+                if (uploadResult.Error != null)
                 {
-                    await dto.Imagen.CopyToAsync(stream);
+                    throw new Exception(
+                        $"Error al subir imagen a Cloudinary: {uploadResult.Error.Message}"
+                    );
                 }
-                imagenExistente.UrlImagen = $"/images/productos/{nombreArchivo}";
+
+                imagenExistente.UrlImagen =
+                    uploadResult.SecureUrl.ToString();
             }
+
             await _imagenRepository.ActualizarAsync(imagenExistente);
         }
+
         public async Task EliminarAsync(int id)
         {
-            var imagen = await _imagenRepository.ObtenerPorIdAsync(id);
+            var imagen =
+                await _imagenRepository.ObtenerPorIdAsync(id);
+
             if (imagen == null)
                 throw new Exception("La imagen no existe.");
 
-            var rutaImagen = Path.Combine(
-                _environment.WebRootPath,
-                imagen.UrlImagen
-                .TrimStart('/')
-                .Replace('/', Path.DirectorySeparatorChar));
-            if (File.Exists(rutaImagen))
-            {
-                File.Delete(rutaImagen);
-            }
+            /*
+             * Si la imagen pertenece a Cloudinary,
+             * posteriormente podemos eliminarla también
+             * desde Cloudinary utilizando su PublicId.
+             */
+
             await _imagenRepository.EliminarAsync(id);
         }
     }
