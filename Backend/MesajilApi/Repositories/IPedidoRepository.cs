@@ -1,4 +1,5 @@
-﻿using MesajilApi.Models;
+﻿using MesajilApi.DTOs.Pedido;
+using MesajilApi.Models;
 
 namespace MesajilApi.Repositories
 {
@@ -10,5 +11,6 @@ namespace MesajilApi.Repositories
         Task<Pedido> ActualizarAsync(Pedido pedido);
         Task<bool> EliminarAsync(int id);
         Task<List<Pedido>> ObtenerPorUsuarioAsync(int idUsuario);
+        Task<List<ProductoMayorDemandaResponseDto>> ObtenerProductosMayorDemandaAsync();
     }
 }

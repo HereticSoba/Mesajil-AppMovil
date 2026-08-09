@@ -34,10 +34,10 @@ namespace MesajilApi.Repositories
             _context.Inventarios.Add(inventario);
             await _context.SaveChangesAsync();
         }
-        public Task ActualizarAsync(Inventario inventario)
+        public async Task ActualizarAsync(Inventario inventario)
         {
             _context.Inventarios.Update(inventario);
-            return Task.CompletedTask;
+            await _context.SaveChangesAsync();
         }
         public async Task EliminarAsync(int id)
         {

@@ -17,7 +17,29 @@
         android:theme="@style/Theme.MesajilAppMovil"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity android:name=".ui.producto.GestionarImagenProductoActivity"
+        <activity
+            android:name=".ui.pedidos.ProductosMayorDemandaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.usuario.AdminUsuariosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.usuario.FormUsuarioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.inventario.FormInventarioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.inventario.AdminInventarioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.categoria.FormCategoriaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.categoria.AdminCategoriasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.producto.GestionarImagenProductoActivity"
             android:exported="false" />
         <activity
             android:name=".ui.producto.AdminImagenesProductoActivity"

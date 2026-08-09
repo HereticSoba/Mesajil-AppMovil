@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mesajil.app.R
 import com.mesajil.app.adapters.CategoriaAdapter
 import com.mesajil.app.adapters.ProductoAdapter
 import com.mesajil.app.databinding.FragmentCategoriasBinding
@@ -22,6 +21,11 @@ import com.mesajil.app.repository.DetalleCarritoRepository
 import com.mesajil.app.repository.ProductoRepository
 import com.mesajil.app.ui.producto.DetalleProductoActivity
 import kotlinx.coroutines.launch
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.ArrayAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mesajil.app.R
 
 class CategoriasFragment : Fragment() {
     private var _binding: FragmentCategoriasBinding? = null
@@ -32,6 +36,11 @@ class CategoriasFragment : Fragment() {
     private val detalleCarritoRepository = DetalleCarritoRepository()
     private var listaProductos: List<Producto> = emptyList()
     private lateinit var productoAdapter: ProductoAdapter
+    private var marcaSeleccionada: String? = null
+    private var categoriaSeleccionada: Int? = null
+    private var precioMinimo: Double? = null
+    private var precioMaximo: Double? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,7 +48,200 @@ class CategoriasFragment : Fragment() {
         _binding = FragmentCategoriasBinding.inflate(inflater, container, false)
         sessionManager = SessionManager(requireContext())
         configurarProductos()
+        configurarBusqueda()
+        binding.btnFiltrar.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                mostrarFiltros()
+            }
+        }
         return binding.root
+    }
+
+    private suspend fun mostrarFiltros() {
+        val vista = LayoutInflater.from(requireContext())
+            .inflate(R.layout.dialog_filtro_productos, null)
+        val autoMarca =
+            vista.findViewById<android.widget.AutoCompleteTextView>(
+                R.id.autoMarca
+            )
+        val autoCategoria =
+            vista.findViewById<android.widget.AutoCompleteTextView>(
+                R.id.autoCategoria
+            )
+        val edtPrecioMin =
+            vista.findViewById<com.google.android.material.textfield.TextInputEditText>(
+                R.id.edtPrecioMin
+            )
+        val edtPrecioMax =
+            vista.findViewById<com.google.android.material.textfield.TextInputEditText>(
+                R.id.edtPrecioMax
+            )
+        val marcas = listaProductos
+            .map { it.marca }
+            .distinct()
+            .sorted()
+        val categorias = categoriaRepository
+            .obtenerCategorias()
+            .filter { it.estado }
+        val listaMarcas = mutableListOf("Todas")
+        listaMarcas.addAll(marcas)
+        val listaCategorias = mutableListOf("Todas")
+        listaCategorias.addAll(
+            categorias.map { it.nombre }
+        )
+        autoMarca.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                listaMarcas
+            )
+        )
+        autoCategoria.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                listaCategorias
+            )
+        )
+        autoMarca.setText(
+            marcaSeleccionada ?: "Todas",
+            false
+        )
+        val categoriaActual = categorias.indexOfFirst {
+            it.idCategoria == categoriaSeleccionada
+        }
+        autoCategoria.setText(
+            if (categoriaActual >= 0) {
+                categorias[categoriaActual].nombre
+            } else {
+                "Todas"
+            },
+            false
+        )
+        edtPrecioMin.setText(
+            precioMinimo?.toString() ?: ""
+        )
+        edtPrecioMax.setText(
+            precioMaximo?.toString() ?: ""
+        )
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Filtrar productos")
+            .setView(vista)
+            .setNegativeButton("Cancelar", null)
+            .setNeutralButton("Limpiar") { _, _ ->
+                marcaSeleccionada = null
+                categoriaSeleccionada = null
+                precioMinimo = null
+                precioMaximo = null
+                binding.edtBuscar.setText("")
+                productoAdapter.actualizarLista(
+                    listaProductos
+                )
+                binding.txtTituloProductos.text =
+                    "Todos los productos"
+            }
+            .setPositiveButton("Aplicar") { _, _ ->
+                val marcaTexto =
+                    autoMarca.text.toString()
+                marcaSeleccionada =
+                    if (
+                        marcaTexto.isBlank() ||
+                        marcaTexto == "Todas"
+                    ) {
+                        null
+                    } else {
+                        marcaTexto
+                    }
+                val categoriaTexto =
+                    autoCategoria.text.toString()
+                categoriaSeleccionada =
+                    categorias.find {
+                        it.nombre == categoriaTexto
+                    }?.idCategoria
+                precioMinimo =
+                    edtPrecioMin.text
+                        ?.toString()
+                        ?.toDoubleOrNull()
+                precioMaximo =
+                    edtPrecioMax.text
+                        ?.toString()
+                        ?.toDoubleOrNull()
+                aplicarFiltros()
+            }
+            .show()
+    }
+
+    private fun aplicarFiltros() {
+        var productosFiltrados = listaProductos
+        marcaSeleccionada?.let { marca ->
+            productosFiltrados =
+                productosFiltrados.filter {
+                    it.marca.equals(
+                        marca,
+                        ignoreCase = true
+                    )
+                }
+        }
+        categoriaSeleccionada?.let { idCategoria ->
+            productosFiltrados =
+                productosFiltrados.filter { it.idCategoria == idCategoria }
+        }
+        precioMinimo?.let { minimo ->
+            productosFiltrados =
+                productosFiltrados.filter { it.precio >= minimo }
+        }
+        precioMaximo?.let { maximo ->
+            productosFiltrados =
+                productosFiltrados.filter { it.precio <= maximo }
+        }
+        productoAdapter.actualizarLista(productosFiltrados)
+        binding.txtTituloProductos.text = "Resultados: ${productosFiltrados.size}"
+    }
+
+    private fun configurarBusqueda() {
+        binding.edtBuscar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                val texto = s
+                    ?.toString()
+                    ?.trim()
+                    ?.lowercase()
+                    ?: ""
+                val productosFiltrados =
+                    if (texto.isEmpty()) {
+                        listaProductos
+                    } else {
+                        listaProductos.filter { producto ->
+                            producto.nombre.lowercase()
+                                .contains(texto) ||
+                                    producto.modelo.lowercase()
+                                        .contains(texto)
+                        }
+                    }
+                productoAdapter.actualizarLista(productosFiltrados)
+                binding.txtTituloProductos.text =
+                    if (texto.isEmpty()) {
+                        "Productos"
+                    } else {
+                        "Resultados de búsqueda"
+                    }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
     }
 
     private fun configurarProductos() {
@@ -74,6 +276,8 @@ class CategoriasFragment : Fragment() {
             val categorias = categoriaRepository.obtenerCategorias()
                 .filter { it.estado }
             listaProductos = productoRepository.obtenerProductos()
+            productoAdapter.actualizarLista(listaProductos)
+            binding.txtTituloProductos.text = "Todos los productos"
             val categoriaAdapter = CategoriaAdapter(
                 categorias = categorias,
                 onCategoriaClick = { categoria ->

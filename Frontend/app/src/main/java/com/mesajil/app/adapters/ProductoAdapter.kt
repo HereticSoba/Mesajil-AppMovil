@@ -7,7 +7,6 @@ import com.mesajil.app.databinding.ItemProductoBinding
 import com.mesajil.app.models.Producto
 import com.bumptech.glide.Glide
 import com.mesajil.app.R
-import android.util.Log
 
 class ProductoAdapter(
     private var listaProductos: List<Producto>,

@@ -13,5 +13,6 @@ namespace MesajilApi.Services
         Task<List<PedidoResponseDto>> ObtenerMisPedidosAsync(int idUsuario);
         Task CancelarPedidoAsync(int idUsuario, int idPedido);
         Task<PedidoDetalleResponseDto?> ObtenerDetallePedidoAsync(int idUsuario, int idPedido);
+        Task<List<ProductoMayorDemandaResponseDto>> ObtenerProductosMayorDemandaAsync();
     }
 }

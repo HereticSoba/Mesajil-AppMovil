@@ -10,6 +10,7 @@ import com.mesajil.app.models.response.ErrorResponse
 import com.mesajil.app.models.response.PedidoDetalleResponse
 import com.mesajil.app.models.response.PedidoFinalizadoResponse
 import com.mesajil.app.models.response.PedidoResponse
+import com.mesajil.app.models.response.ProductoMayorDemandaResponse
 import com.mesajil.app.repository.PedidoRepository
 import kotlinx.coroutines.launch
 
@@ -109,6 +110,19 @@ class PedidoViewModel : ViewModel() {
                 onError(
                     e.message ?: "Error de conexión."
                 )
+            }
+        }
+    }
+
+    fun obtenerProductosMayorDemanda(
+        onSuccess: (List<ProductoMayorDemandaResponse>) -> Unit, onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                val productos = repository.obtenerProductosMayorDemanda()
+                onSuccess(productos)
+            } catch (e: Exception) {
+                onError(e.message ?: "No se pudieron obtener los productos.")
             }
         }
     }

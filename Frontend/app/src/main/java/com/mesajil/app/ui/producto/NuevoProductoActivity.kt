@@ -19,6 +19,11 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import com.mesajil.app.repository.CategoriaRepository
+import com.mesajil.app.models.response.CategoriaResponse
+import android.widget.ArrayAdapter
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class NuevoProductoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNuevoProductoBinding
@@ -26,11 +31,15 @@ class NuevoProductoActivity : AppCompatActivity() {
     private val imagenViewModel: ImagenProductoViewModel by viewModels()
     private var imagenSeleccionada: Uri? = null
     private var idProductoEditar: Int = 0
+    private val categoriaRepository = CategoriaRepository()
+    private var idCategoriaSeleccionada = 0
+    private var categorias = emptyList<CategoriaResponse>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNuevoProductoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        cargarCategorias()
         idProductoEditar = intent.getIntExtra("ID_PRODUCTO", 0)
         if (idProductoEditar > 0) {
             binding.toolbar.title = "Modificar producto"
@@ -74,21 +83,46 @@ class NuevoProductoActivity : AppCompatActivity() {
         }
     }
 
+    private fun cargarCategorias() {
+
+        lifecycleScope.launch {
+
+            val resultado =
+                categoriaRepository.obtenerCategorias()
+                    .filter { it.estado }
+
+            categorias = resultado
+
+            val nombres =
+                categorias.map { it.nombre }
+
+            val adapter = ArrayAdapter(
+                this@NuevoProductoActivity,
+                android.R.layout.simple_dropdown_item_1line,
+                nombres
+            )
+
+            binding.autoCategoria.setAdapter(adapter)
+
+            binding.autoCategoria.setOnItemClickListener { _, _, position, _ ->
+
+                idCategoriaSeleccionada =
+                    categorias[position].idCategoria
+            }
+
+            if (idProductoEditar > 0) {
+                cargarProducto(idProductoEditar)
+            }
+        }
+    }
+
     private fun registrarProducto() {
-
-        val idCategoria = binding.edtIdCategoria.text.toString().toIntOrNull()
-
         val nombre = binding.edtNombre.text.toString().trim()
-
         val descripcion = binding.edtDescripcion.text.toString().trim().ifEmpty { null }
-
         val marca = binding.edtMarca.text.toString().trim()
-
         val modelo = binding.edtModelo.text.toString().trim()
-
         val precio = binding.edtPrecio.text.toString().toDoubleOrNull()
-
-        if (idCategoria == null || nombre.isEmpty() || marca.isEmpty() || modelo.isEmpty() || precio == null) {
+        if (idCategoriaSeleccionada == 0 || nombre.isEmpty() || marca.isEmpty() || modelo.isEmpty() || precio == null) {
             Toast.makeText(
                 this,
                 "Completa los campos obligatorios.",
@@ -97,7 +131,7 @@ class NuevoProductoActivity : AppCompatActivity() {
             return
         }
         val request = ProductoCreateRequest(
-            idCategoria = idCategoria,
+            idCategoria = idCategoriaSeleccionada,
             nombre = nombre,
             descripcion = descripcion,
             marca = marca,
@@ -143,7 +177,7 @@ class NuevoProductoActivity : AppCompatActivity() {
     private fun actualizarProducto() {
         val request = ProductoUpdateRequest(
             idProducto = idProductoEditar,
-            idCategoria = binding.edtIdCategoria.text.toString().toInt(),
+            idCategoria = idCategoriaSeleccionada,
             nombre = binding.edtNombre.text.toString().trim(),
             descripcion = binding.edtDescripcion.text.toString().trim(),
             marca = binding.edtMarca.text.toString().trim(),
@@ -178,9 +212,16 @@ class NuevoProductoActivity : AppCompatActivity() {
         viewModel.obtenerProductoPorId(
             idProducto = idProducto, onSuccess = { producto ->
                 runOnUiThread {
-                    binding.edtIdCategoria.setText(
-                        producto.idCategoria.toString()
-                    )
+                    idCategoriaSeleccionada = producto.idCategoria
+                    val posicion = categorias.indexOfFirst {
+                        it.idCategoria == producto.idCategoria
+                    }
+                    if (posicion >= 0) {
+                        binding.autoCategoria.setText(
+                            categorias[posicion].nombre,
+                            false
+                        )
+                    }
                     binding.edtNombre.setText(
                         producto.nombre
                     )

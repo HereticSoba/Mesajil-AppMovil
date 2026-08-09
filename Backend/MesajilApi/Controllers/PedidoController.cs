@@ -108,5 +108,12 @@ namespace MesajilApi.Controllers
                 return NotFound();
             return Ok(detalle);
         }
+        [HttpGet("productos-mayor-demanda")]
+        public async Task<IActionResult> ObtenerProductosMayorDemanda()
+        {
+            var productos =
+                await _service.ObtenerProductosMayorDemandaAsync();
+            return Ok(productos);
+        }
     }
 }

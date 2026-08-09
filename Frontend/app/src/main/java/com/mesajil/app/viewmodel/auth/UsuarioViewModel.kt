@@ -7,6 +7,8 @@ import com.mesajil.app.repository.UsuarioRepository
 import retrofit2.Response
 import com.google.gson.Gson
 import com.mesajil.app.models.request.ActualizarPerfilRequest
+import com.mesajil.app.models.request.UsuarioCreateRequest
+import com.mesajil.app.models.request.UsuarioUpdateRequest
 import com.mesajil.app.models.response.ErrorResponse
 import com.mesajil.app.models.response.UsuarioResponse
 
@@ -82,20 +84,78 @@ class UsuarioViewModel : ViewModel() {
                 } else {
                     val errorBody = response.errorBody()?.string()
                     val mensaje = try {
-                        Gson().fromJson(
-                            errorBody,
-                            ErrorResponse::class.java
-                        ).mensaje
+                        Gson().fromJson(errorBody, ErrorResponse::class.java).mensaje
                     } catch (e: Exception) {
                         "No se pudo obtener la información del usuario."
                     }
                     onError(mensaje)
                 }
-            }catch (e:Exception){
-                onError(
-                    e.message
-                        ?: "No se pudo obtener la información del usuario."
-                )
+            } catch (e: Exception) {
+                onError(e.message ?: "No se pudo obtener la información del usuario.")
+            }
+        }
+    }
+
+    fun obtenerUsuarios(
+        onSuccess: (List<UsuarioResponse>) -> Unit, onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = repository.obtenerUsuarios()
+                if (response.isSuccessful) {
+                    onSuccess(response.body() ?: emptyList())
+                } else {
+                    onError("No se pudieron obtener los usuarios.")
+                }
+            } catch (e: Exception) {
+                onError(e.message ?: "Error de conexión.")
+            }
+        }
+    }
+
+    fun crearUsuario(
+        request: UsuarioCreateRequest, onSuccess: () -> Unit, onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = repository.crearUsuario(request)
+                if (response.isSuccessful) {
+                    onSuccess()
+                } else {
+                    onError("No se pudo registrar el usuario.")
+                }
+            } catch (e: Exception) {
+                onError(e.message ?: "Error de conexión.")
+            }
+        }
+    }
+
+    fun actualizarUsuario(
+        idUsuario: Int,
+        request: UsuarioUpdateRequest,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = repository.actualizarUsuario(idUsuario, request)
+                if (response.isSuccessful) {
+                    onSuccess()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val mensaje = try {
+                        Gson()
+                            .fromJson(
+                                errorBody,
+                                ErrorResponse::class.java
+                            ).mensaje
+                    } catch (e: Exception) {
+                        "No se pudo actualizar el usuario."
+                    }
+                    onError(mensaje)
+                }
+            } catch (e: Exception) {
+                onError(e.message ?: "Error de conexión.")
             }
         }
     }

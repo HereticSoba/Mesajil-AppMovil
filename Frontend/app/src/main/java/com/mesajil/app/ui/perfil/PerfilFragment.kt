@@ -11,8 +11,11 @@ import com.mesajil.app.ui.login.LoginActivity
 import com.mesajil.app.preferences.SessionManager
 import android.widget.Toast
 import com.mesajil.app.ui.pedidos.HistorialPedidosActivity
-import com.mesajil.app.ui.producto.AdminProductosActivity
+import com.mesajil.app.ui.categoria.AdminCategoriasActivity
 import com.mesajil.app.ui.producto.AdministrarProductosActivity
+import com.mesajil.app.ui.inventario.AdminInventarioActivity
+import com.mesajil.app.ui.usuario.AdminUsuariosActivity
+import com.mesajil.app.ui.pedidos.ProductosMayorDemandaActivity
 
 class PerfilFragment : Fragment() {
     private var _binding: FragmentPerfilBinding? = null
@@ -49,8 +52,48 @@ class PerfilFragment : Fragment() {
                     )
                 )
             }
+            binding.cardAdministrarCategorias.visibility = View.VISIBLE
+            binding.cardAdministrarCategorias.setOnClickListener {
+                startActivity(
+                    Intent(
+                        requireContext(),
+                        AdminCategoriasActivity::class.java
+                    )
+                )
+            }
+            binding.cardAdministrarInventario.visibility = View.VISIBLE
+            binding.cardAdministrarInventario.setOnClickListener {
+                startActivity(
+                    Intent(
+                        requireContext(),
+                        AdminInventarioActivity::class.java
+                    )
+                )
+            }
+            binding.cardAdministrarUsuarios.visibility = View.VISIBLE
+            binding.cardAdministrarUsuarios.setOnClickListener {
+                startActivity(
+                    Intent(
+                        requireContext(),
+                        AdminUsuariosActivity::class.java
+                    )
+                )
+            }
+            binding.cardProductosMayorDemanda.visibility = View.VISIBLE
+            binding.cardProductosMayorDemanda.setOnClickListener {
+                startActivity(
+                    Intent(
+                        requireContext(),
+                        ProductosMayorDemandaActivity::class.java
+                    )
+                )
+            }
         } else {
             binding.cardAdministrarProductos.visibility = View.GONE
+            binding.cardAdministrarCategorias.visibility = View.GONE
+            binding.cardAdministrarInventario.visibility = View.GONE
+            binding.cardAdministrarUsuarios.visibility = View.GONE
+            binding.cardProductosMayorDemanda.visibility = View.GONE
         }
         binding.cardAcerca.setOnClickListener {
             Toast.makeText(

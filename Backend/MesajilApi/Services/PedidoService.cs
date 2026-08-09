@@ -259,5 +259,9 @@ namespace MesajilApi.Services
                 }).ToList()
             };
         }
+        public async Task<List<ProductoMayorDemandaResponseDto>> ObtenerProductosMayorDemandaAsync()
+        {
+            return await _repository.ObtenerProductosMayorDemandaAsync();
+        }
     }
 }

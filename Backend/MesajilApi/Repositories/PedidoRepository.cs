@@ -1,4 +1,5 @@
 ﻿using MesajilApi.Data;
+using MesajilApi.DTOs.Pedido;
 using MesajilApi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +50,22 @@ namespace MesajilApi.Repositories
             return await _context.Pedidos
                 .Where(p => p.IdUsuario == idUsuario)
                 .OrderByDescending(p => p.FechaPedido)
+                .ToListAsync();
+        }
+        public async Task<List<ProductoMayorDemandaResponseDto>>ObtenerProductosMayorDemandaAsync()
+        {
+            return await _context.DetallePedidos
+                .Where(d =>d.Pedido != null && d.Pedido.EstadoPedido != "Cancelado")
+                .GroupBy(d => new{
+                    d.IdProducto, Nombre = d.Producto!.Nombre
+                })
+                .Select(g => new ProductoMayorDemandaResponseDto
+                {
+                    IdProducto = g.Key.IdProducto,
+                    Nombre = g.Key.Nombre,
+                    CantidadVendida = g.Sum(d => d.Cantidad)
+                })
+                .OrderByDescending(x => x.CantidadVendida)
                 .ToListAsync();
         }
     }

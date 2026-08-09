@@ -4,6 +4,7 @@ import com.mesajil.app.models.request.FinalizarCompraRequest
 import com.mesajil.app.models.response.PedidoDetalleResponse
 import com.mesajil.app.models.response.PedidoFinalizadoResponse
 import com.mesajil.app.models.response.PedidoResponse
+import com.mesajil.app.models.response.ProductoMayorDemandaResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -29,4 +30,8 @@ interface PedidoService {
     suspend fun cancelarPedido(
         @Path("id") idPedido: Int
     ): Response<Unit>
+
+    @GET("api/Pedido/productos-mayor-demanda")
+    suspend fun obtenerProductosMayorDemanda():
+            Response<List<ProductoMayorDemandaResponse>>
 }

@@ -43,17 +43,15 @@ namespace MesajilApi.Services
 
         public async Task ActualizarAsync(CategoriaUpdateDto dto)
         {
-            var entidad = CategoriaMapper.toEntity(dto);
-
-            var categoriaExistente = await _categoriaRepository.ObtenerPorIdAsync(dto.IdCategoria);
-
+            var categoriaExistente =
+                await _categoriaRepository.ObtenerPorIdAsync(dto.IdCategoria);
             if (categoriaExistente == null)
                 throw new Exception("La categoría no existe.");
 
-            entidad.FechaRegistro = categoriaExistente.FechaRegistro;
-            entidad.Estado = categoriaExistente.Estado;
+            categoriaExistente.Nombre = dto.Nombre;
+            categoriaExistente.Descripcion = dto.Descripcion;
 
-            await _categoriaRepository.ActualizarAsync(entidad);
+            await _categoriaRepository.ActualizarAsync(categoriaExistente);
         }
 
         public async Task EliminarAsync(int id)

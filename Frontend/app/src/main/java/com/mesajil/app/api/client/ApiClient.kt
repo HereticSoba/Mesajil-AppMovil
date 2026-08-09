@@ -9,6 +9,7 @@ import com.mesajil.app.api.services.DetalleCarritoService
 import com.mesajil.app.api.interceptor.AuthInterceptor
 import com.mesajil.app.api.services.CategoriaService
 import com.mesajil.app.api.services.ImagenProductoService
+import com.mesajil.app.api.services.InventarioService
 import com.mesajil.app.api.services.PagoService
 import com.mesajil.app.preferences.SessionProvider
 import okhttp3.OkHttpClient
@@ -57,6 +58,9 @@ object ApiClient {
     }
     val categoriaService: CategoriaService by lazy {
         retrofit.create(CategoriaService::class.java)
+    }
+    val inventarioService: InventarioService by lazy {
+        retrofit.create(InventarioService::class.java)
     }
     val pagoService: PagoService by lazy {
         retrofit.create(PagoService::class.java)
