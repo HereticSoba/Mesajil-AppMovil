@@ -40,7 +40,7 @@ class CarritoAdapter(
             txtCantidad.text = producto.cantidad.toString()
             txtSubtotal.text = "Subtotal: S/. %.2f".format(producto.subtotal)
             if(!producto.urlImagen.isNullOrBlank()){
-                val urlCompleta = "http://192.168.100.54:5228${producto.urlImagen}"
+                val urlCompleta = "https://mesajil-appmovil.onrender.com${producto.urlImagen}"
                 Glide.with(root.context)
                     .load(urlCompleta)
                     .placeholder(R.drawable.ic_producto)

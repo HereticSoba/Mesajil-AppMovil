@@ -129,7 +129,7 @@ class GestionarImagenProductoActivity : AppCompatActivity() {
                     if (imagen != null) {
                         idImagen = imagen.idImagen
                         val urlImagen =
-                            "http://192.168.100.54:5228${imagen.urlImagen}"
+                            "https://mesajil-appmovil.onrender.com${imagen.urlImagen}"
                         Glide.with(this)
                             .load(urlImagen)
                             .placeholder(R.drawable.ic_image)

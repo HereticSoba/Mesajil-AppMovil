@@ -17,6 +17,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/mesajil_white"
             app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationIconTint="@color/mesajil_white"
             app:title="Finalizar compra"
             app:titleTextColor="@color/text_primary" />
 

@@ -32,7 +32,7 @@ class AdminProductoAdapter(
         holder.binding.txtPrecio.text = "S/. %.2f".format(producto.precio)
         holder.binding.txtStock.text = "Stock: ${producto.stockActual}"
         if (!producto.urlImagen.isNullOrEmpty()) {
-            val urlImagen ="http://192.168.100.54:5228${producto.urlImagen}"
+            val urlImagen ="https://mesajil-appmovil.onrender.com${producto.urlImagen}"
             Glide.with(holder.binding.imgProducto.context)
                 .load(urlImagen)
                 .placeholder(R.drawable.ic_image)

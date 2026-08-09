@@ -1,28 +1,48 @@
 package com.mesajil.app
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.mesajil.app.ui.home.HomeFragment
 import com.mesajil.app.ui.categoria.CategoriasFragment
 import com.mesajil.app.ui.carrito.CarritoFragment
 import com.mesajil.app.ui.perfil.PerfilFragment
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.FragmentContainerView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val preferencias = getSharedPreferences(
+            "preferencias_app",
+            Context.MODE_PRIVATE
+        )
+        val modoOscuro = preferencias.getBoolean("modo_oscuro", false)
+
+        if (modoOscuro) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val fragmentContainer = findViewById<FragmentContainerView>(R.id.fragmentController)
-        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        val fragmentContainer = findViewById<android.view.View>(
+            R.id.fragmentController
+        )
+        val bottomNavigation =
+            findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(
+                R.id.bottomNavigation
+            )
         ViewCompat.setOnApplyWindowInsetsListener(fragmentContainer) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, systemBars.top, 0, 0)
+            view.setPadding(
+                0,
+                systemBars.top,
+                0,
+                0
+            )
             insets
         }
-
         bottomNavigation.setOnItemSelectedListener { item ->
             val fragment = when (item.itemId) {
                 R.id.nav_home -> HomeFragment()
@@ -37,8 +57,8 @@ class MainActivity : AppCompatActivity() {
             true
         }
         if (savedInstanceState == null) {
-            val abrirCarrito = intent.getBooleanExtra("abrir_carrito", false)
-
+            val abrirCarrito =
+                intent.getBooleanExtra("abrir_carrito", false)
             if (abrirCarrito) {
                 bottomNavigation.selectedItemId = R.id.nav_carrito
             } else {

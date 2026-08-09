@@ -20,8 +20,6 @@ import com.mesajil.app.models.request.DetalleCarritoRequest
 import com.mesajil.app.repository.ProductoRepository
 import kotlinx.coroutines.launch
 import com.mesajil.app.repository.DetalleCarritoRepository
-import com.mesajil.app.repository.CategoriaRepository
-import com.mesajil.app.models.response.CategoriaResponse
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -29,35 +27,24 @@ class HomeFragment : Fragment() {
     private lateinit var sessionManager: SessionManager
     private val productoRepository = ProductoRepository()
     private val detalleCarritoRepository = DetalleCarritoRepository()
-    private val categoriaRepository = CategoriaRepository()
     private var listaProductos: List<Producto> = emptyList()
-    private var listaCategorias: List<CategoriaResponse> = emptyList()
     private lateinit var productoAdapter: ProductoAdapter
-    private var marcaSeleccionada: String? = null
-    private var categoriaSeleccionada: Int? = null
-    private var precioMinimo: Double? = null
-    private var precioMaximo: Double? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.headerCategorias.txtTitulo.text = "Categorías"
         binding.headerProductos.txtTitulo.text = "Productos destacados"
         sessionManager = SessionManager(requireContext())
         val nombre = sessionManager.obtenerNombre()
         binding.txtSaludo.text = "Hola, $nombre"
         configurarRecycler()
-        binding.btnFiltrar.setOnClickListener {
-            mostrarDialogoFiltros()
-        }
         return binding.root
     }
 
     private fun configurarRecycler() {
         viewLifecycleOwner.lifecycleScope.launch {
             listaProductos = productoRepository.obtenerProductos()
-            listaCategorias = categoriaRepository.obtenerCategorias()
             productoAdapter = ProductoAdapter(
                 listaProductos = listaProductos,
                 onProductoClick = { producto ->
@@ -168,140 +155,11 @@ class HomeFragment : Fragment() {
             ?.toString()
             ?.trim()
             .orEmpty()
-
         val productosFiltrados = listaProductos.filter { producto ->
-            val coincideBusqueda = consulta.isEmpty() ||
+            consulta.isEmpty() ||
                     producto.nombre.contains(consulta, ignoreCase = true) ||
                     producto.modelo.contains(consulta, ignoreCase = true)
-            val coincideMarca = marcaSeleccionada == null ||
-                    producto.marca.equals(
-                        marcaSeleccionada,
-                        ignoreCase = true
-                    )
-            val coincideCategoria = categoriaSeleccionada == null ||
-                    producto.idCategoria == categoriaSeleccionada
-            val coincidePrecioMin = precioMinimo == null ||
-                    producto.precio >= precioMinimo!!
-            val coincidePrecioMax = precioMaximo == null ||
-                    producto.precio <= precioMaximo!!
-
-            coincideBusqueda && coincideMarca && coincideCategoria && coincidePrecioMin && coincidePrecioMax
         }
         productoAdapter.actualizarLista(productosFiltrados)
-    }
-
-    private fun mostrarDialogoFiltros() {
-        val dialogBinding =
-            com.mesajil.app.databinding.DialogFiltroProductosBinding.inflate(layoutInflater)
-        val marcas = mutableListOf("Todas")
-        marcas.addAll(
-            listaProductos
-                .map { it.marca }
-                .filter { it.isNotBlank() }
-                .distinct()
-                .sorted()
-        )
-        val adapterMarcas = android.widget.ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
-            marcas
-        )
-        dialogBinding.autoMarca.setAdapter(adapterMarcas)
-        val nombresCategorias = mutableListOf("Todas")
-        nombresCategorias.addAll(
-            listaCategorias
-                .filter { it.estado }
-                .map { it.nombre }
-                .sorted()
-        )
-        val adapterCategorias = android.widget.ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
-            nombresCategorias
-        )
-        dialogBinding.autoCategoria.setAdapter(
-            adapterCategorias
-        )
-        marcaSeleccionada?.let {
-            dialogBinding.autoMarca.setText(marcaSeleccionada ?: "Todas", false)
-            val nombreCategoriaSeleccionada =
-                listaCategorias.find { it.idCategoria == categoriaSeleccionada }
-                    ?.nombre
-                    ?: "Todas"
-            dialogBinding.autoCategoria.setText(
-                nombreCategoriaSeleccionada,
-                false
-            )
-        }
-        precioMinimo?.let {
-            dialogBinding.edtPrecioMin.setText(it.toString())
-        }
-        precioMaximo?.let {
-            dialogBinding.edtPrecioMax.setText(it.toString())
-        }
-        val dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Filtrar productos")
-            .setView(dialogBinding.root)
-            .setNegativeButton("Cancelar", null)
-            .setNeutralButton("Limpiar", null)
-            .setPositiveButton("Aplicar", null)
-            .create()
-
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                val marca = dialogBinding.autoMarca.text.toString()
-                marcaSeleccionada = if (marca.isBlank() || marca == "Todas") {
-                    null
-                } else {
-                    marca
-                }
-                val nombreCategoria = dialogBinding.autoCategoria.text.toString()
-                categoriaSeleccionada = if (
-                    nombreCategoria.isBlank() ||
-                    nombreCategoria == "Todas"
-                ) {
-                    null
-                } else {
-                    listaCategorias.find { it.nombre == nombreCategoria }
-                        ?.idCategoria
-                }
-                precioMinimo = dialogBinding.edtPrecioMin.text
-                    ?.toString()
-                    ?.toDoubleOrNull()
-                precioMaximo = dialogBinding.edtPrecioMax.text
-                    ?.toString()
-                    ?.toDoubleOrNull()
-
-                if (
-                    precioMinimo != null &&
-                    precioMaximo != null &&
-                    precioMinimo!! > precioMaximo!!
-                ) {
-                    Toast.makeText(
-                        requireContext(),
-                        "El precio mínimo no puede ser mayor al máximo.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setOnClickListener
-                }
-                aplicarFiltros()
-                dialog.dismiss()
-            }
-            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
-                marcaSeleccionada = null
-                categoriaSeleccionada = null
-                precioMinimo = null
-                precioMaximo = null
-
-                dialogBinding.autoMarca.setText("Todas", false)
-                dialogBinding.autoCategoria.setText("Todas", false)
-                dialogBinding.edtPrecioMin.text?.clear()
-                dialogBinding.edtPrecioMax.text?.clear()
-
-                aplicarFiltros()
-                dialog.dismiss()
-            }
-        }
-        dialog.show()
     }
 }

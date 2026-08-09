@@ -64,7 +64,8 @@
             <ImageView
                 android:layout_width="22dp"
                 android:layout_height="22dp"
-                android:src="@drawable/ic_arrow_right" />
+                android:src="@drawable/ic_arrow_right"
+                app:tint="@color/text_primary"/>
 
         </LinearLayout>
 

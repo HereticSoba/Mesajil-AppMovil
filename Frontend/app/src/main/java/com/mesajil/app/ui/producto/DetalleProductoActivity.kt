@@ -89,7 +89,7 @@ class DetalleProductoActivity : AppCompatActivity() {
         binding.btnComprar.isEnabled = stock > 0
 
         if (!urlImagen.isNullOrBlank()) {
-            val urlCompleta = "http://192.168.100.54:5228${urlImagen}"
+            val urlCompleta = "https://mesajil-appmovil.onrender.com${urlImagen}"
             Glide.with(this)
                 .load(urlCompleta)
                 .placeholder(R.drawable.logomesajil)

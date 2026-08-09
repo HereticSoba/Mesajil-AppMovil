@@ -16,6 +16,8 @@ import com.mesajil.app.ui.producto.AdministrarProductosActivity
 import com.mesajil.app.ui.inventario.AdminInventarioActivity
 import com.mesajil.app.ui.usuario.AdminUsuariosActivity
 import com.mesajil.app.ui.pedidos.ProductosMayorDemandaActivity
+import androidx.appcompat.app.AppCompatDelegate
+import android.content.Context
 
 class PerfilFragment : Fragment() {
     private var _binding: FragmentPerfilBinding? = null
@@ -29,6 +31,26 @@ class PerfilFragment : Fragment() {
         sessionManager = SessionManager(requireContext())
         binding.txtNombre.text = sessionManager.obtenerNombre()
         binding.txtCorreo.text = sessionManager.obtenerCorreo()
+        val preferencias = requireContext().getSharedPreferences(
+            "preferencias_app",
+            Context.MODE_PRIVATE
+        )
+        val modoOscuro = preferencias.getBoolean("modo_oscuro", false)
+        binding.switchModoOscuro.isChecked = modoOscuro
+        binding.switchModoOscuro.setOnCheckedChangeListener { _, activado ->
+            preferencias.edit()
+                .putBoolean("modo_oscuro", activado)
+                .apply()
+            if (activado) {
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_YES
+                )
+            } else {
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_NO
+                )
+            }
+        }
 
         binding.cardMiInformacion.setOnClickListener {
             val intent = Intent(requireContext(), MiInformacionActivity::class.java)
