@@ -1,234 +1,250 @@
--- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
---
--- Host: 127.0.0.1    Database: db_mesajil
--- ------------------------------------------------------
--- Server version	8.0.44
+-- MySQL Workbench Forward Engineering
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
---
--- Table structure for table `carrito`
---
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema db_mesajil
+-- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `db_mesajil` ;
 
-DROP TABLE IF EXISTS `carrito`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `carrito` (
-  `idCarrito` int NOT NULL AUTO_INCREMENT,
-  `idUsuario` int NOT NULL,
-  `fechaCreacion` datetime NOT NULL,
-  `estado` tinyint NOT NULL DEFAULT '1',
-  PRIMARY KEY (`idCarrito`),
-  KEY `fk_producto_rol_idx` (`idUsuario`),
-  CONSTRAINT `fk_carrito_usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
+-- -----------------------------------------------------
+-- Schema db_mesajil
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `db_mesajil` DEFAULT CHARACTER SET utf8mb3 ;
+USE `db_mesajil` ;
 
---
--- Table structure for table `categoria`
---
+-- -----------------------------------------------------
+-- Table `db_mesajil`.`rol`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_mesajil`.`rol` ;
 
-DROP TABLE IF EXISTS `categoria`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `categoria` (
-  `idCategoria` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(80) NOT NULL,
-  `descripcion` varchar(200) DEFAULT NULL,
-  `estado` tinyint NOT NULL DEFAULT '1',
-  `fechaRegistro` datetime NOT NULL,
-  PRIMARY KEY (`idCategoria`),
-  UNIQUE KEY `nombre_UNIQUE` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `detallecarrito`
---
-
-DROP TABLE IF EXISTS `detallecarrito`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `detallecarrito` (
-  `idDetalleCarrito` int NOT NULL AUTO_INCREMENT,
-  `idCarrito` int NOT NULL,
-  `idProducto` int NOT NULL,
-  `cantidad` int NOT NULL,
-  `precioUnitario` decimal(10,2) NOT NULL,
-  `subtotal` decimal(10,2) NOT NULL,
-  PRIMARY KEY (`idDetalleCarrito`),
-  KEY `fk_carrito_rol_idx` (`idCarrito`),
-  KEY `fk_detallecarrito_producto_idx` (`idProducto`),
-  CONSTRAINT `fk_detallecarrito_carrito` FOREIGN KEY (`idCarrito`) REFERENCES `carrito` (`idCarrito`),
-  CONSTRAINT `fk_detallecarrito_producto` FOREIGN KEY (`idProducto`) REFERENCES `producto` (`idProducto`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `detallepedido`
---
-
-DROP TABLE IF EXISTS `detallepedido`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `detallepedido` (
-  `idDetallePedido` int NOT NULL AUTO_INCREMENT,
-  `idPedido` int NOT NULL,
-  `idProducto` int NOT NULL,
-  `cantidad` int NOT NULL,
-  `precioUnitario` decimal(10,2) NOT NULL,
-  `subtotal` decimal(10,2) NOT NULL,
-  PRIMARY KEY (`idDetallePedido`),
-  KEY `fk_pedido_rol_idx` (`idPedido`),
-  KEY `fk_producto_rol_idx` (`idProducto`),
-  CONSTRAINT `fk_detallepedido_pedido` FOREIGN KEY (`idPedido`) REFERENCES `pedido` (`idPedido`),
-  CONSTRAINT `fk_detallepedido_producto` FOREIGN KEY (`idProducto`) REFERENCES `producto` (`idProducto`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `imagenesproducto`
---
-
-DROP TABLE IF EXISTS `imagenesproducto`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `imagenesproducto` (
-  `idImagen` int NOT NULL AUTO_INCREMENT,
-  `idProducto` int NOT NULL,
-  `urlImagen` varchar(255) NOT NULL,
-  `principal` tinyint NOT NULL DEFAULT '0',
-  PRIMARY KEY (`idImagen`),
-  KEY `fk_producto_rol_idx` (`idProducto`),
-  CONSTRAINT `fk_imagen_producto` FOREIGN KEY (`idProducto`) REFERENCES `producto` (`idProducto`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `inventario`
---
-
-DROP TABLE IF EXISTS `inventario`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `inventario` (
-  `idInventario` int NOT NULL AUTO_INCREMENT,
-  `idProducto` int NOT NULL,
-  `stockActual` int NOT NULL DEFAULT '0',
-  `stockMinimo` int NOT NULL DEFAULT '0',
-  `ultimaActualizacion` datetime NOT NULL,
-  PRIMARY KEY (`idInventario`),
-  UNIQUE KEY `idProducto_UNIQUE` (`idProducto`),
-  KEY `fk_producto_rol_idx` (`idProducto`),
-  CONSTRAINT `fk_inventario_producto` FOREIGN KEY (`idProducto`) REFERENCES `producto` (`idProducto`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `pedido`
---
-
-DROP TABLE IF EXISTS `pedido`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `pedido` (
-  `idPedido` int NOT NULL AUTO_INCREMENT,
-  `idUsuario` int NOT NULL,
-  `fechaPedido` datetime NOT NULL,
-  `total` decimal(10,2) NOT NULL,
-  `estadoPedido` varchar(30) NOT NULL,
-  `tipoEntrega` varchar(20) NOT NULL DEFAULT 'Recojo',
-  `direccionEntrega` varchar(200) DEFAULT NULL,
-  `tiendaRecojo` varchar(100) DEFAULT NULL,
-  `costoEnvio` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `estadoPago` varchar(30) NOT NULL DEFAULT 'Pendiente',
-  `IdOrdenMercadoPago` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`idPedido`),
-  KEY `fk_usuario_rol_idx` (`idUsuario`),
-  CONSTRAINT `fk_pedido_usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `producto`
---
-
-DROP TABLE IF EXISTS `producto`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `producto` (
-  `idProducto` int NOT NULL AUTO_INCREMENT,
-  `idCategoria` int NOT NULL,
-  `nombre` varchar(120) NOT NULL,
-  `descripcion` text,
-  `marca` varchar(80) NOT NULL,
-  `modelo` varchar(80) NOT NULL,
-  `precio` decimal(10,2) NOT NULL,
-  `estado` tinyint NOT NULL DEFAULT '1',
-  `fechaRegistro` datetime NOT NULL,
-  PRIMARY KEY (`idProducto`),
-  KEY `fk_categoria_rol_idx` (`idCategoria`),
-  CONSTRAINT `fk_producto_categoria` FOREIGN KEY (`idCategoria`) REFERENCES `categoria` (`idCategoria`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `rol`
---
-
-DROP TABLE IF EXISTS `rol`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `rol` (
-  `idRol` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(50) NOT NULL,
-  `descripcion` varchar(150) DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS `db_mesajil`.`rol` (
+  `idRol` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(50) NOT NULL,
+  `descripcion` VARCHAR(150) NULL DEFAULT NULL,
   PRIMARY KEY (`idRol`),
-  UNIQUE KEY `nombre_UNIQUE` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  UNIQUE INDEX `nombre_UNIQUE` (`nombre` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8mb3;
 
---
--- Table structure for table `usuario`
---
 
-DROP TABLE IF EXISTS `usuario`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `usuario` (
-  `idUsuario` int NOT NULL AUTO_INCREMENT,
-  `idRol` int NOT NULL,
-  `nombres` varchar(100) NOT NULL,
-  `apellidos` varchar(100) NOT NULL,
-  `correo` varchar(100) NOT NULL,
-  `contrasena` varchar(255) NOT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `direccion` varchar(200) DEFAULT NULL,
-  `fechaRegistro` datetime NOT NULL,
-  `estado` tinyint NOT NULL DEFAULT '1',
+-- -----------------------------------------------------
+-- Table `db_mesajil`.`usuario`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_mesajil`.`usuario` ;
+
+CREATE TABLE IF NOT EXISTS `db_mesajil`.`usuario` (
+  `idUsuario` INT NOT NULL AUTO_INCREMENT,
+  `idRol` INT NOT NULL,
+  `nombres` VARCHAR(100) NOT NULL,
+  `apellidos` VARCHAR(100) NOT NULL,
+  `correo` VARCHAR(100) NOT NULL,
+  `contrasena` VARCHAR(255) NOT NULL,
+  `telefono` VARCHAR(20) NULL DEFAULT NULL,
+  `direccion` VARCHAR(200) NULL DEFAULT NULL,
+  `fechaRegistro` DATETIME NOT NULL,
+  `estado` TINYINT NOT NULL DEFAULT '1',
   PRIMARY KEY (`idUsuario`),
-  UNIQUE KEY `correo_UNIQUE` (`correo`),
-  KEY `fk_usuario_rol_idx` (`idRol`),
-  CONSTRAINT `fk_usuario_rol` FOREIGN KEY (`idRol`) REFERENCES `rol` (`idRol`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+  UNIQUE INDEX `correo_UNIQUE` (`correo` ASC) VISIBLE,
+  INDEX `fk_usuario_rol_idx` (`idRol` ASC) VISIBLE,
+  CONSTRAINT `fk_usuario_rol`
+    FOREIGN KEY (`idRol`)
+    REFERENCES `db_mesajil`.`rol` (`idRol`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 13
+DEFAULT CHARACTER SET = utf8mb3;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-08-09  3:38:23
+-- -----------------------------------------------------
+-- Table `db_mesajil`.`carrito`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_mesajil`.`carrito` ;
+
+CREATE TABLE IF NOT EXISTS `db_mesajil`.`carrito` (
+  `idCarrito` INT NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT NOT NULL,
+  `fechaCreacion` DATETIME NOT NULL,
+  `estado` TINYINT NOT NULL DEFAULT '1',
+  PRIMARY KEY (`idCarrito`),
+  INDEX `fk_producto_rol_idx` (`idUsuario` ASC) VISIBLE,
+  CONSTRAINT `fk_carrito_usuario`
+    FOREIGN KEY (`idUsuario`)
+    REFERENCES `db_mesajil`.`usuario` (`idUsuario`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 5
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `db_mesajil`.`categoria`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_mesajil`.`categoria` ;
+
+CREATE TABLE IF NOT EXISTS `db_mesajil`.`categoria` (
+  `idCategoria` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(80) NOT NULL,
+  `descripcion` VARCHAR(200) NULL DEFAULT NULL,
+  `estado` TINYINT NOT NULL DEFAULT '1',
+  `fechaRegistro` DATETIME NOT NULL,
+  PRIMARY KEY (`idCategoria`),
+  UNIQUE INDEX `nombre_UNIQUE` (`nombre` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 9
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `db_mesajil`.`producto`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_mesajil`.`producto` ;
+
+CREATE TABLE IF NOT EXISTS `db_mesajil`.`producto` (
+  `idProducto` INT NOT NULL AUTO_INCREMENT,
+  `idCategoria` INT NOT NULL,
+  `nombre` VARCHAR(120) NOT NULL,
+  `descripcion` TEXT NULL DEFAULT NULL,
+  `marca` VARCHAR(80) NOT NULL,
+  `modelo` VARCHAR(80) NOT NULL,
+  `precio` DECIMAL(10,2) NOT NULL,
+  `estado` TINYINT NOT NULL DEFAULT '1',
+  `fechaRegistro` DATETIME NOT NULL,
+  PRIMARY KEY (`idProducto`),
+  INDEX `fk_categoria_rol_idx` (`idCategoria` ASC) VISIBLE,
+  CONSTRAINT `fk_producto_categoria`
+    FOREIGN KEY (`idCategoria`)
+    REFERENCES `db_mesajil`.`categoria` (`idCategoria`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 38
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `db_mesajil`.`detallecarrito`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_mesajil`.`detallecarrito` ;
+
+CREATE TABLE IF NOT EXISTS `db_mesajil`.`detallecarrito` (
+  `idDetalleCarrito` INT NOT NULL AUTO_INCREMENT,
+  `idCarrito` INT NOT NULL,
+  `idProducto` INT NOT NULL,
+  `cantidad` INT NOT NULL,
+  `precioUnitario` DECIMAL(10,2) NOT NULL,
+  `subtotal` DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (`idDetalleCarrito`),
+  INDEX `fk_carrito_rol_idx` (`idCarrito` ASC) VISIBLE,
+  INDEX `fk_detallecarrito_producto_idx` (`idProducto` ASC) VISIBLE,
+  CONSTRAINT `fk_detallecarrito_carrito`
+    FOREIGN KEY (`idCarrito`)
+    REFERENCES `db_mesajil`.`carrito` (`idCarrito`),
+  CONSTRAINT `fk_detallecarrito_producto`
+    FOREIGN KEY (`idProducto`)
+    REFERENCES `db_mesajil`.`producto` (`idProducto`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 47
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `db_mesajil`.`pedido`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_mesajil`.`pedido` ;
+
+CREATE TABLE IF NOT EXISTS `db_mesajil`.`pedido` (
+  `idPedido` INT NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT NOT NULL,
+  `fechaPedido` DATETIME NOT NULL,
+  `total` DECIMAL(10,2) NOT NULL,
+  `estadoPedido` VARCHAR(30) NOT NULL,
+  `tipoEntrega` VARCHAR(20) NOT NULL DEFAULT 'Recojo',
+  `direccionEntrega` VARCHAR(200) NULL DEFAULT NULL,
+  `tiendaRecojo` VARCHAR(100) NULL DEFAULT NULL,
+  `costoEnvio` DECIMAL(10,2) NOT NULL DEFAULT '0.00',
+  `estadoPago` VARCHAR(30) NOT NULL DEFAULT 'Pendiente',
+  `IdOrdenMercadoPago` VARCHAR(100) NULL DEFAULT NULL,
+  PRIMARY KEY (`idPedido`),
+  INDEX `fk_usuario_rol_idx` (`idUsuario` ASC) VISIBLE,
+  CONSTRAINT `fk_pedido_usuario`
+    FOREIGN KEY (`idUsuario`)
+    REFERENCES `db_mesajil`.`usuario` (`idUsuario`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 11
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `db_mesajil`.`detallepedido`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_mesajil`.`detallepedido` ;
+
+CREATE TABLE IF NOT EXISTS `db_mesajil`.`detallepedido` (
+  `idDetallePedido` INT NOT NULL AUTO_INCREMENT,
+  `idPedido` INT NOT NULL,
+  `idProducto` INT NOT NULL,
+  `cantidad` INT NOT NULL,
+  `precioUnitario` DECIMAL(10,2) NOT NULL,
+  `subtotal` DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (`idDetallePedido`),
+  INDEX `fk_pedido_rol_idx` (`idPedido` ASC) VISIBLE,
+  INDEX `fk_producto_rol_idx` (`idProducto` ASC) VISIBLE,
+  CONSTRAINT `fk_detallepedido_pedido`
+    FOREIGN KEY (`idPedido`)
+    REFERENCES `db_mesajil`.`pedido` (`idPedido`),
+  CONSTRAINT `fk_detallepedido_producto`
+    FOREIGN KEY (`idProducto`)
+    REFERENCES `db_mesajil`.`producto` (`idProducto`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 11
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `db_mesajil`.`imagenesproducto`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_mesajil`.`imagenesproducto` ;
+
+CREATE TABLE IF NOT EXISTS `db_mesajil`.`imagenesproducto` (
+  `idImagen` INT NOT NULL AUTO_INCREMENT,
+  `idProducto` INT NOT NULL,
+  `urlImagen` VARCHAR(255) NOT NULL,
+  `principal` TINYINT NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idImagen`),
+  INDEX `fk_producto_rol_idx` (`idProducto` ASC) VISIBLE,
+  CONSTRAINT `fk_imagen_producto`
+    FOREIGN KEY (`idProducto`)
+    REFERENCES `db_mesajil`.`producto` (`idProducto`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 29
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `db_mesajil`.`inventario`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_mesajil`.`inventario` ;
+
+CREATE TABLE IF NOT EXISTS `db_mesajil`.`inventario` (
+  `idInventario` INT NOT NULL AUTO_INCREMENT,
+  `idProducto` INT NOT NULL,
+  `stockActual` INT NOT NULL DEFAULT '0',
+  `stockMinimo` INT NOT NULL DEFAULT '0',
+  `ultimaActualizacion` DATETIME NOT NULL,
+  PRIMARY KEY (`idInventario`),
+  UNIQUE INDEX `idProducto_UNIQUE` (`idProducto` ASC) VISIBLE,
+  INDEX `fk_producto_rol_idx` (`idProducto` ASC) VISIBLE,
+  CONSTRAINT `fk_inventario_producto`
+    FOREIGN KEY (`idProducto`)
+    REFERENCES `db_mesajil`.`producto` (`idProducto`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 20
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
