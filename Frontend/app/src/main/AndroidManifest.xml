@@ -17,6 +17,20 @@
         android:theme="@style/Theme.MesajilAppMovil"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity android:name=".ui.producto.GestionarImagenProductoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.producto.AdminImagenesProductoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.producto.AdministrarProductosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.producto.AdminProductosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.producto.NuevoProductoActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.pedidos.DetallePedidoActivity"
             android:exported="false" />

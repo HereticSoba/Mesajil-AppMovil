@@ -33,13 +33,20 @@ namespace MesajilApi.Services
         }
         public async Task ActualizarAsync(ProductoUpdateDto dto)
         {
-            var entidad = ProductoMapper.ToEntity(dto);
-            var productoExistente = await _productoRepository.ObtenerPorIdAsync(dto.IdProducto);
+            var productoExistente =
+                await _productoRepository.ObtenerPorIdAsync(dto.IdProducto);
+
             if (productoExistente == null)
                 throw new Exception("El producto no existe.");
-            entidad.FechaRegistro = productoExistente.FechaRegistro;
-            entidad.Estado = productoExistente.Estado;
-            await _productoRepository.ActualizarAsync(entidad);
+
+            productoExistente.IdCategoria = dto.IdCategoria;
+            productoExistente.Nombre = dto.Nombre;
+            productoExistente.Descripcion = dto.Descripcion;
+            productoExistente.Marca = dto.Marca;
+            productoExistente.Modelo = dto.Modelo;
+            productoExistente.Precio = dto.Precio;
+
+            await _productoRepository.ActualizarAsync(productoExistente);
         }
         public async Task EliminarAsync(int id)
         {

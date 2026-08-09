@@ -11,6 +11,8 @@ import com.mesajil.app.ui.login.LoginActivity
 import com.mesajil.app.preferences.SessionManager
 import android.widget.Toast
 import com.mesajil.app.ui.pedidos.HistorialPedidosActivity
+import com.mesajil.app.ui.producto.AdminProductosActivity
+import com.mesajil.app.ui.producto.AdministrarProductosActivity
 
 class PerfilFragment : Fragment() {
     private var _binding: FragmentPerfilBinding? = null
@@ -36,6 +38,19 @@ class PerfilFragment : Fragment() {
                     HistorialPedidosActivity::class.java
                 )
             )
+        }
+        if (sessionManager.obtenerIdRol() == 1) {
+            binding.cardAdministrarProductos.visibility = View.VISIBLE
+            binding.cardAdministrarProductos.setOnClickListener {
+                startActivity(
+                    Intent(
+                        requireContext(),
+                        AdministrarProductosActivity::class.java
+                    )
+                )
+            }
+        } else {
+            binding.cardAdministrarProductos.visibility = View.GONE
         }
         binding.cardAcerca.setOnClickListener {
             Toast.makeText(
