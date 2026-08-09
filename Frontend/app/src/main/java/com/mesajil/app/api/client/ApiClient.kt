@@ -17,7 +17,7 @@ import com.mesajil.app.api.services.UsuarioService
 import com.mesajil.app.api.services.PedidoService
 
 object ApiClient {
-    private const val BASE_URL = "http://192.168.100.54:5228/"
+    private const val BASE_URL = "https://mesajil-appmovil.onrender.com/"
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(
