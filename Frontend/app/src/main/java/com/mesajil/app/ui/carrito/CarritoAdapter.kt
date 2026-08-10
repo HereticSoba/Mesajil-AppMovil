@@ -39,14 +39,13 @@ class CarritoAdapter(
             txtPrecio.text = "S/. %.2f".format(producto.precioUnitario)
             txtCantidad.text = producto.cantidad.toString()
             txtSubtotal.text = "Subtotal: S/. %.2f".format(producto.subtotal)
-            if(!producto.urlImagen.isNullOrBlank()){
-                val urlCompleta = "https://mesajil-appmovil.onrender.com${producto.urlImagen}"
+            if (!producto.urlImagen.isNullOrBlank()) {
                 Glide.with(root.context)
-                    .load(urlCompleta)
+                    .load(producto.urlImagen)
                     .placeholder(R.drawable.ic_producto)
                     .error(R.drawable.ic_producto)
                     .into(imgProducto)
-            }else{
+            } else {
                 imgProducto.setImageResource(R.drawable.ic_producto)
             }
 

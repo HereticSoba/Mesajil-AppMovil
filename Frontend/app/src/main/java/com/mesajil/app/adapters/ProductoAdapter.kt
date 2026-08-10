@@ -36,9 +36,8 @@ class ProductoAdapter(
                 "Sin stock"
             }
             if (!producto.urlImagen.isNullOrBlank()) {
-                val urlCompleta = "https://mesajil-appmovil.onrender.com${producto.urlImagen}"
                 Glide.with(binding.root.context)
-                    .load(urlCompleta)
+                    .load(producto.urlImagen)
                     .placeholder(R.drawable.logomesajil)
                     .error(R.drawable.logomesajil)
                     .into(binding.imgProducto)
