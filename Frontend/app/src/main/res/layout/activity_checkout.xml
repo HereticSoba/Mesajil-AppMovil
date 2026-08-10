@@ -15,11 +15,11 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/mesajil_white"
+            android:background="@color/mesajil_blue"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:navigationIconTint="@color/mesajil_white"
             app:title="Finalizar compra"
-            app:titleTextColor="@color/text_primary" />
+            app:titleTextColor="@color/mesajil_white" />
 
         <LinearLayout
             android:layout_width="match_parent"
