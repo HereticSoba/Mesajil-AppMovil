@@ -98,9 +98,6 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
 
-//Deshabilitado porque me arroja error ya que el programa quiere el certificado HTTPS (por ahora no hay)
-//app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 
 app.UseAuthentication();
